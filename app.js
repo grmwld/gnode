@@ -4,8 +4,45 @@
 var express = require('express')
   , stylus = require('stylus')
   , nib = require('nib')
+  , passport = require('passport')
   , http = require('http')
-  , path = require('path');
+  , path = require('path')
+  , flash = require('connect-flash')
+  ;
+
+
+/**
+ * Passport configuration
+ */
+var LocalStrategy = require('passport-local').Strategy;
+
+passport.serializeUser(function(user, next) {
+  next(null, user);
+});
+
+passport.deserializeUser(function(id, next){
+  next(null, id);
+});
+
+passport.use(new LocalStrategy(function(username, password, next) {
+  // asynchronous verification, for effect...
+  process.nextTick(function () {
+    User.findOne({username: username}, function(err, user) {
+      if (err) {
+        return next(err);
+      }
+      if (!user) {
+        return next(null, false, {
+          message: 'Unknown user ' + username
+        });
+      }
+      if (!user.validPassword(password)) {
+        return next(null, false, {message: 'Invalid password'});
+      }
+      return next(null, user);
+    })
+  });
+}));
 
 
 /**
@@ -26,7 +63,13 @@ app.configure(function(){
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(express.cookieParser('your secret here'));
-  app.use(express.session());
+  app.use(express.session({
+    cookie: {maxAge: 60000},
+    secret: 'live long and prosper'
+  }));
+  app.use(flash());
+  app.use(passport.initialize());
+  app.use(passport.session());
   app.use(app.router);
   app.use(stylus.middleware({
     src: __dirname + '/public',
@@ -51,14 +94,15 @@ app.configure('production', function() {
 
 
 /**
- * Sub-applications
+ * Controllers and routing
  */
-var home = require('./mods/home');
-var login = require('./mods/login');
-var signup = require('./mods/signup');
+var home = require('./controllers/home');
+var login = require('./controllers/login');
+var signup = require('./controllers/signup');
 
-app.use(home);
-app.use(login);
+home.route(app);
+login.route(app);
+signup.route(app);
 
 
 /**

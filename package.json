@@ -6,13 +6,15 @@
     "start": "node app"
   },
   "dependencies": {
+    "connect-flash": "*",
     "express": "3.x.x",
     "jade": "0.27.x",
     "stylus": "0.31.x",
     "nib": "0.9.x",
     "validator": "0.4.x",
     "mongoose": "3.x",
-    "everyauth": "0.3.x"
+    "passport": "0.1.x",
+    "passport-local": "0.1.x"
   },
   "devDependencies": {
     "mocha": "1.7.x"
