@@ -1,0 +1,20 @@
+{
+  "name": "gstrider",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app"
+  },
+  "dependencies": {
+    "express": "3.x.x",
+    "jade": "0.27.x",
+    "stylus": "0.31.x",
+    "nib": "0.9.x",
+    "validator": "0.4.x",
+    "mongoose": "3.x",
+    "everyauth": "0.3.x"
+  },
+  "devDependencies": {
+    "mocha": "1.7.x"
+  }
+}
