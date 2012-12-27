@@ -1,0 +1,8 @@
+extend ../layout
+
+block content
+    h3 Please sign in with your credentials
+    form(action='/login', method='POST')
+        p: input(type='text', placeholder='Username')
+        p: input(type='password', placeholder='Password')
+        p: input(type='submit', value='Login')
