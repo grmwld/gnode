@@ -1,0 +1,27 @@
+.navbar.navbar-fixed-top
+  .navbar-inner
+    .container
+      a.brand(href='/') gStrider 
+      .nav-collapse
+        ul.nav.nav-pills
+          li.active
+            a(href='/') Home
+          li
+            a(href='/about') About
+          li
+            a(href='/contact') Contact
+          -if(session.user)
+            li
+              a(href='/dashboard') Dashboard
+      -if(session.user)
+        #logoutsection.pull-right
+          a#logout-btn.btn.btn-info.pull-right.top-bar-form-button(href='/logout') Logout
+          p#loginprompt.pull-right.login-prompt #{session.user.username} 
+            small logged In
+      -else
+        form.navbar-form.pull-right.form-horizontal.top-bar-form(method="post", id="loginForm")
+          input.input-small.top-bar-form-textbox(id="username", type="text", name="User", placeholder="Username")
+          input.input-small.top-bar-form-textbox(id="password", type="password", name="Password", placeholder="Password")
+          .btn-group
+            button.btn.btn-primary.btn-small.top-bar-form-button(type="submit", value="Login") Login
+            button.btn.btn-small.top-bar-form-button(href='/signup') Signup

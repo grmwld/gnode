@@ -1,7 +1,27 @@
 !!! 5
 html
-    head
-        title #{title}
-    body
-        h1 GStrider
+  head
+    title= title
+    link(rel='stylesheet', href='/vendor/bootstrap/css/bootstrap.min.css')
+    link(rel='stylesheet', href='/stylesheets/custom.css')
+  body
+    include topbar
+    .container
+      .content
+        #signupMessage.alert(style="display:none;")
+          button.close(data-dismiss="alert") x
         block content
+          .row-fluid
+            .span9
+            .span3
+              .well.sidebar-nav
+                h3 Secondary Content
+          
+      #footer.footer 
+        p &copy; GStrider 2013
+        script(type='text/javascript', src='/vendor/jquery/jquery-1.8.3.min.js')
+        script(type='text/javascript', src='/vendor/bootstrap/bootstrap.min.js')
+        script(type='text/javascript', src='/javascripts/index.js')
+        script(type='text/javascript', src='/javascripts/signup.js')
+        script(type='text/javascript', src='/javascripts/login.js')
+        
