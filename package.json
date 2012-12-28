@@ -13,9 +13,11 @@
     "validator": "0.4.x",
     "mongoose": "3.x",
     "passport": "0.1.x",
-    "passport-local": "0.1.x"
+    "passport-local": "0.1.x",
+    "async": "~0.1.22"
   },
   "devDependencies": {
+    "chai": "1.4.x",
     "mocha": "1.7.x"
   }
 }
