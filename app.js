@@ -2,8 +2,7 @@
  * Module dependencies.
  */
 var express = require('express')
-  , stylus = require('stylus')
-  , nib = require('nib')
+  , less = require('less-middleware')
   , passport = require('passport')
   , http = require('http')
   , path = require('path')
@@ -70,15 +69,13 @@ app.configure(function(){
   app.use(flash());
   app.use(passport.initialize());
   app.use(passport.session());
+  app.use(function(req, res, next) {
+    res.locals.session = req.session;
+    next();
+  });
   app.use(app.router);
-  app.use(stylus.middleware({
+  app.use(less({
     src: __dirname + '/public',
-    compile: function(str, path){
-      return stylus(str)
-        .set('filename', path)
-        .set('compress', true)
-        .use(nib());
-    }              
   }));
   app.use(express.static(path.join(__dirname, 'public')));
 });
