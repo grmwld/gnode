@@ -4,6 +4,7 @@
 var express = require('express')
   , less = require('less-middleware')
   , passport = require('passport')
+  , mongoose = require('mongoose')
   , http = require('http')
   , path = require('path')
   , flash = require('connect-flash')
@@ -42,6 +43,12 @@ passport.use(new LocalStrategy(function(username, password, next) {
     })
   });
 }));
+
+
+/**
+ * MongoDB connection
+ */
+mongoose.connect('mongodb://localhost/gStrider_test')
 
 
 /**
@@ -94,6 +101,7 @@ app.configure('production', function() {
  * Controllers and routing
  */
 var home = require('./controllers/home');
+var login = require('./controllers/login');
 var about = require('./controllers/about');
 var contact = require('./controllers/contact');
 var documentation = require('./controllers/documentation');
@@ -101,6 +109,7 @@ var dashboard = require('./controllers/dashboard');
 var signup = require('./controllers/signup');
 
 home.route(app);
+login.route(app);
 about.route(app);
 contact.route(app);
 documentation.route(app);
@@ -111,6 +120,7 @@ signup.route(app);
 /**
  * Top level error handling
  */
+
 
 
 /**

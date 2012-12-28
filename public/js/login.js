@@ -1,8 +1,6 @@
 /**
-  * Make an Object that encompasses the behavior of this script. This way,
-  * only this Object will be exposed to other scripts, thus reducing the namespace
-  * conflicts
-  */
+ * Login module
+ */
 
 define([ 'jquery' ], function($) {
   var initialize = function() {
