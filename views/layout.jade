@@ -2,7 +2,7 @@
 html
   head
     title= title
-    link(rel='stylesheet', href='/vendor/bootstrap/css/bootstrap.min.css')
+    link(rel='stylesheet', href='/stylesheets/vendor/bootstrap/bootstrap.min.css')
     link(rel='stylesheet', href='/stylesheets/custom.css')
   body
     include topbar
@@ -19,9 +19,4 @@ html
           
       #footer.footer 
         p &copy; GStrider 2013
-        script(type='text/javascript', src='/vendor/jquery/jquery-1.8.3.min.js')
-        script(type='text/javascript', src='/vendor/bootstrap/bootstrap.min.js')
-        script(type='text/javascript', src='/javascripts/index.js')
-        script(type='text/javascript', src='/javascripts/signup.js')
-        script(type='text/javascript', src='/javascripts/login.js')
-        
+        script(data-main="/js/main", src="/js/vendor/require/require.js")
