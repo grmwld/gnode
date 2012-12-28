@@ -12,9 +12,9 @@ var route = function(app) {
    *
    * @handle {Route#GET} /
    */
-  app.get('/dashboard', function(req, res) {
-    res.render('dashboard', {
-      title: 'GStrider : Dashboard'
+  app.get('/about', function(req, res) {
+    res.render('about', {
+      title: 'GStrider : About'
     });
   });
 

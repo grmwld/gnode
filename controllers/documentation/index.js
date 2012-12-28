@@ -12,9 +12,9 @@ var route = function(app) {
    *
    * @handle {Route#GET} /
    */
-  app.get('/dashboard', function(req, res) {
-    res.render('dashboard', {
-      title: 'GStrider : Dashboard'
+  app.get('/documentation', function(req, res) {
+    res.render('documentation', {
+      title: 'GStrider : Documentation'
     });
   });
 
@@ -25,3 +25,5 @@ var route = function(app) {
  * Expose public functions, classes and methods
  */
 exports.route = route;
+
+

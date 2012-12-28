@@ -94,11 +94,17 @@ app.configure('production', function() {
  * Controllers and routing
  */
 var home = require('./controllers/home');
-var login = require('./controllers/login');
+var about = require('./controllers/about');
+var contact = require('./controllers/contact');
+var documentation = require('./controllers/documentation');
+var dashboard = require('./controllers/dashboard');
 var signup = require('./controllers/signup');
 
 home.route(app);
-login.route(app);
+about.route(app);
+contact.route(app);
+documentation.route(app);
+dashboard.route(app);
 signup.route(app);
 
 
