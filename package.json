@@ -6,19 +6,19 @@
     "start": "node app"
   },
   "dependencies": {
-    "connect-flash": "latest",
-    "express": "3.x.x",
-    "jade": "0.27.x",
-    "less-middleware": "0.1.x",
-    "validator": "0.4.x",
-    "mongoose": "3.x.x",
-    "passport": "0.1.x",
-    "passport-local": "0.1.x",
     "async": "~0.1.22",
+    "connect-flash": "~0.1.0",
+    "express": "~3.0.5",
+    "jade": "~0.27.7",
+    "less-middleware": "~0.1.9",
+    "mongoose": "~3.5.3",
+    "passport": "~0.1.15",
+    "passport-local": "~0.1.6",
+    "validator": "~0.4.19"
   },
   "devDependencies": {
-    "chai": "1.4.x",
-    "mocha": "1.7.x"
+    "chai": "~1.4.2",
+    "mocha": "~1.7.4",
     "supertest": "~0.5.1"
   }
 }
