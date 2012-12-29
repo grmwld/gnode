@@ -35,10 +35,23 @@ var userSchema = new Schema({
  * Statics
  */
 
+/**
+ * Find a user by its username
+ *
+ * @param {String} username
+ * @param {Function} callback
+ */
 userSchema.statics.findByUsername = function(username, callback) {
   this.findOne({username: username}, callback);
 }
 
+/**
+ * Find a user by its username
+ *
+ * @param {String} username
+ * @param {String} password
+ * @param {Function} callback
+ */
 userSchema.statics.checkCredentials = function(username, password, callback) {
   this.findByUsername(username, function(err, user) {
     if(!user) {

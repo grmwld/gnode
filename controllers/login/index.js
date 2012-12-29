@@ -15,16 +15,15 @@ var route = function(app) {
    * @handle {Route#POST} /login
    */
   app.post('/login', function(req, res) {
-    var username = req.body.user;
+    var username = req.body.username;
     var password = req.body.password;
     User.checkCredentials(username, password, function(err, user) {
       if (err && !user) {
-        res.json({ retStatus: 'failure' });
+        res.send({ retStatus: 'failure' });
       }
       else {
-        console.log(user);
         req.session.user = user;
-        res.json({
+        res.send({
           retStatus: 'success',
           user: user
         });

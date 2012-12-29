@@ -6,7 +6,8 @@ YELLOW = \x1b[33;01m
 BIN_SCRIPT = ./bin
 TEST_DIR = ./test
 TEST_MODELS = "$(TEST_DIR)/test-models.js"
-TEST_USERS = "$(TEST_DIR)/test-users.js"
+TEST_USERS = "$(TEST_DIR)/users/"
+TEST_API = "$(TEST_DIR)/api/"
 DEMO_DIR = "$(TEST_DIR)/data"
 DEMO_STORE = "$(TEST_DIR)/store"
 DEMO_SIZES = "$(DEMO_DIR)/sacCer1.sizes"
@@ -26,21 +27,27 @@ REPORTER = "spec"
 
 test: reinstall-demo test-all remove-demo
 
-test-all: test-models test-users
+test-all: test-models test-users test-api
 
 test-models:
 	@NODE_ENV=test 	./node_modules/.bin/mocha \
 		--reporter $(REPORTER) \
 		--timeout 10000 \
 		--slow 1000 \
+		--recursive \
 		$(TEST_MODELS)
 
 test-users:
 	@NODE_ENV=test 	./node_modules/.bin/mocha \
 		--reporter $(REPORTER) \
-		--timeout 10000 \
-		--slow 1000 \
+		--recursive \
 		$(TEST_USERS)
+
+test-api:
+	@NODE_ENV=test 	./node_modules/.bin/mocha \
+		--reporter $(REPORTER) \
+		--recursive \
+		$(TEST_API)
 
 
 install-demo: unpack_demo load_reference load_annotation prepare_bigwigStore

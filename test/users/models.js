@@ -1,27 +1,27 @@
+'use strict';
+
 var expect = require('chai').expect
-  , async = require('async')
-  , mongoose = require('mongoose')
-  , User = require('../models/user').User
+  , utils = require('../utils')
+  , User = require('../../models/user').User
   ;
 
 
-describe('User', function() {
-  var connection = mongoose.connect('mongodb://localhost/gstrider_test');
+beforeEach(function(done) {
   var userOne = new User({
     username: 'agrimaldi',
     password: 'qwe',
     admin: true,
     email: 'agrimaldi@asd.com'
   });
-
-  beforeEach(function(done) {
-    User.collection.remove(function(err) {
-      if (err) return done(err);
-      userOne.save(function(err) {
-        done(err);
-      });
+  User.remove(function(err) {
+    userOne.save(function(err) {
+      done(err);
     });
   });
+});
+
+
+describe('User', function() {
 
   describe('.checkCredentials()', function() {
     it('responds with user if exists and password is correct', function(done) {
@@ -40,6 +40,7 @@ describe('User', function() {
       User.checkCredentials('non-existent', 'qwe', function(err, user) {
         try {
           expect(err).to.be.an.instanceof(Error);
+          expect(err.message).to.equal('AuthFailed : Username does not exist');
           expect(user).to.be.undefined;
           done();
         }
@@ -52,6 +53,7 @@ describe('User', function() {
       User.checkCredentials('agrimaldi', 'qweasd', function(err, user) {
         try {
           expect(err).to.be.an.instanceof(Error);
+          expect(err.message).to.equal('AuthFailed : Invalid Password');
           expect(user).to.be.undefined;
           done();
         }
@@ -61,4 +63,5 @@ describe('User', function() {
       });
     });
   });
+
 });
