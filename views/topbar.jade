@@ -19,9 +19,9 @@
           p#loginprompt.pull-right.login-prompt #{session.user.username} 
             small logged In
       -else
-        form.navbar-form.pull-right.form-horizontal.top-bar-form(method="post", id="loginForm")
-          input.input-small.top-bar-form-textbox(id="username", type="text", name="username", placeholder="Username")
-          input.input-small.top-bar-form-textbox(id="password", type="password", name="password", placeholder="Password")
+        form.navbar-form.pull-right.form-horizontal.top-bar-form(method='post', id='loginForm')
+          input.input-small.top-bar-form-textbox(id='username', type='text', name='username', placeholder='Username')
+          input.input-small.top-bar-form-textbox(id='password', type='password', name='password', placeholder='Password')
           .btn-group
-            button.btn.btn-primary.btn-small.top-bar-form-button(type="submit", value="Login") Login
-            button.btn.btn-small.top-bar-form-button(href='/signup') Signup
+            button.btn.btn-primary.btn-small.top-bar-form-button(type='submit', value='Login') Login
+            button.btn.btn-small.top-bar-form-button(onClick="location.href='/signup'") Signup

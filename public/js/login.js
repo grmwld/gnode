@@ -3,17 +3,14 @@
  */
 
 define([ 'jquery' ], function($) {
+
   var initialize = function() {
-    /*
-     * Login form submit
-     */
     $('#loginForm').submit(function(event) {
-      /*
-       * Prevent the form from taking default action.
-       */
+      
       event.preventDefault();
-      var username = $('#username').val();
-      var password = $('#password').val();
+
+      var username = $('#username').val()
+        , password = $('#password').val();
 
       /*
        * Do this check because the form submits even on Sign Up
