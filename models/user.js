@@ -77,14 +77,19 @@ userSchema.statics.checkCredentials = function(username, password, callback) {
  * @param {Function} callback
  */
 userSchema.statics.hashPassword = function(password, callback) {
-    var BCRYPT_COST = (process.env.NODE_ENV === 'test')
-                      ? 1
-                      : 10;
-    //var BCRYPT_COST = 10;
-    //if (process.env.NODE_ENV === 'test') {
-      //BCRYPT_COST = 1;
-    //}
+    var BCRYPT_COST = (process.env.NODE_ENV === 'test') ? 1 : 10;
     bcrypt.hash(password, BCRYPT_COST, callback);
+};
+
+/**
+ * compare a password to a hashed password
+ *
+ * @param {String} password
+ * @param {String} hash
+ * @param {Function} callback
+ */
+userSchema.statics.comparePasswordAndHash = function(password, hash, callback) {
+    bcrypt.compare(password, hash, callback);
 };
 
 

@@ -85,7 +85,7 @@ describe('User', function() {
   describe('.comparePasswordAndHash()', function() {
 
     var password = 'secret'
-      . fakepassword = 'hackpass';
+      , fakepassword = 'hackpass';
 
     it('should return true if password is valid', function(done) {
       User.hashPassword(password, function(err, hash) {
