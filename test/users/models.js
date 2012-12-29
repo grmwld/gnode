@@ -23,7 +23,9 @@ beforeEach(function(done) {
 
 describe('User', function() {
 
+
   describe('.checkCredentials()', function() {
+
     it('responds with user if exists and password is correct', function(done) {
       User.checkCredentials('agrimaldi', 'qwe', function(err, user) {
         try {
@@ -62,6 +64,49 @@ describe('User', function() {
         }
       });
     });
+
   });
+
+  
+  describe('.hashPassword()', function() {
+    
+    it('should return a hashed password asynchronously', function(done) {
+      var password = 'secret';
+      User.hashPassword(password, function(err, passwordHash) {
+        expect(err).to.not.exist;
+        expect(passwordHash).to.exist;
+        done();
+      });
+    });
+
+  });
+
+
+  describe('.comparePasswordAndHash()', function() {
+
+    var password = 'secret'
+      . fakepassword = 'hackpass';
+
+    it('should return true if password is valid', function(done) {
+      User.hashPassword(password, function(err, hash) {
+        User.comparePasswordAndHash(password, hash, function(err, areEqual) {
+          expect(err).to.not.exist;
+          expect(areEqual).to.be.true;
+          done();
+        });
+      });
+    });
+    it('should return false if password is invalid', function(done) {
+      User.hashPassword(password, function(err, hash) {
+        User.comparePasswordAndHash(fakepassword, hash, function(err, areEqual) {
+          expect(err).to.not.exist;
+          expect(areEqual).to.be.false;
+          done();
+        });
+      });
+    });
+
+  });
+
 
 });
