@@ -1,0 +1,13 @@
+extend ../layout
+
+block content
+  .page-header
+    h2 Signup
+      small
+        p: Account creation is not automatic, please be patient while we review your request
+  form(method='post', id='signupForm')
+    p: input(id='username', type='text', name='username', placeholder='Username')
+    p: input(id='password', type='text', name='password', placeholder='Password')
+    p: input(id='password_confirm', type='text', name='password_confirm', placeholder='Password confirmation')
+    p: input(id='email', type='text', name='email', placeholder='Email address')
+    p: button.btn.btn-primary.btn-small(type='submit', value='Signup') Signup
