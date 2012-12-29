@@ -1,4 +1,5 @@
 var util = require('util')
+  , bcrypt = require('bcrypt')
   , mongoose = require('mongoose')
   , Schema = mongoose.Schema
   ;
@@ -67,6 +68,23 @@ userSchema.statics.checkCredentials = function(username, password, callback) {
       }
     }
   });
+};
+
+/**
+ * Hash a password
+ *
+ * @param {String} password
+ * @param {Function} callback
+ */
+userSchema.statics.hashPassword = function(password, callback) {
+    var BCRYPT_COST = (process.env.NODE_ENV === 'test')
+                      ? 1
+                      : 10;
+    //var BCRYPT_COST = 10;
+    //if (process.env.NODE_ENV === 'test') {
+      //BCRYPT_COST = 1;
+    //}
+    bcrypt.hash(password, BCRYPT_COST, callback);
 };
 
 
