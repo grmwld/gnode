@@ -35,14 +35,25 @@ var userSchema = new Schema({
  * Statics
  */
 
+/**
+ * Find a user by its username
+ *
+ * @param {String} username
+ * @param {Function} callback
+ */
 userSchema.statics.findByUsername = function(username, callback) {
   this.findOne({username: username}, callback);
 }
 
+/**
+ * Find a user by its username
+ *
+ * @param {String} username
+ * @param {String} password
+ * @param {Function} callback
+ */
 userSchema.statics.checkCredentials = function(username, password, callback) {
   this.findByUsername(username, function(err, user) {
-    console.log(username, password);
-    console.log(user.password);
     if(!user) {
       callback(new Error('AuthFailed : Username does not exist'));
     }
@@ -59,4 +70,4 @@ userSchema.statics.checkCredentials = function(username, password, callback) {
 };
 
 
-module.exports = mongoose.model('User', userSchema);
+exports.User = mongoose.model('User', userSchema);
