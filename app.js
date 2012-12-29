@@ -8,6 +8,7 @@ var express = require('express')
   , http = require('http')
   , path = require('path')
   , flash = require('connect-flash')
+  , config = require('./config')
   ;
 
 
@@ -46,15 +47,9 @@ passport.use(new LocalStrategy(function(username, password, next) {
 
 
 /**
- * MongoDB connection
- */
-mongoose.connect('mongodb://localhost/gStrider_test')
-
-
-/**
  * Create the main app
  */
-var app = express();
+var app = module.exports = express();
 
 
 /**
@@ -64,6 +59,7 @@ app.configure(function(){
   app.set('port', process.env.PORT || 3000);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
+  app.set('dbUrl', config.db[app.settings.env]);
   app.use(express.favicon());
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
@@ -87,6 +83,11 @@ app.configure(function(){
   app.use(express.static(path.join(__dirname, 'public')));
 });
 
+app.configure('test', function() {
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
+  console.log('Application started in test mode.');
+});
+
 app.configure('development', function() {
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
   console.log('Application started in development mode.');
@@ -95,6 +96,12 @@ app.configure('development', function() {
 app.configure('production', function() {
   console.log('Application started in production mode.');
 });
+
+
+/**
+ * MongoDB connection
+ */
+mongoose.connect(app.get('dbUrl'));
 
 
 /**
