@@ -10,8 +10,12 @@ var expect = require('chai').expect
   
 beforeEach(function(done) {
   var userOne = new User({
+    name: {
+      first: 'Alexis',
+      last: 'GRIMALDI'
+    },
     username: 'agrimaldi',
-    passwordHash: 'qwe',
+    passwordHash: 'secret',
     admin: true,
     email: 'agrimaldi@asd.com'
   });
@@ -27,16 +31,19 @@ describe('POST /login', function() {
         .post('/login')
         .send({
           username: 'agrimaldi',
-          password: 'qwe'
+          password: 'secret'
         })
         .expect(200)
         .end(function(err, res) {
           expect(err).to.not.exist;
           expect(res.body).to.have.property('retStatus', 'success');
           expect(res.body).to.have.property('user');
-          expect(res.body.user).to.have.keys(['__v', 'bookmarks',
+          expect(res.body.user).to.have.keys(['__v', 'bookmarks', 'name',
             'username', 'passwordHash', 'admin', 'email', '_id'
           ]);
+          expect(res.body.user).to.have.deep.property('username', 'agrimaldi');
+          expect(res.body.user).to.have.deep.property('name.first', 'Alexis');
+          expect(res.body.user).to.have.deep.property('name.last', 'GRIMALDI');
           done();
         });
     });
