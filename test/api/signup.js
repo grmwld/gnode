@@ -15,7 +15,7 @@ describe('POST /signup', function() {
       first: 'Alexis',
       last: 'GRIMALDI'
     },
-    username: 'agrimaldi',
+    username: 'agrimaldi-signuptest',
     password: 'secret',
     password_confirm: 'secret',
     email: 'agrimaldi@gstrider.org'
@@ -52,10 +52,8 @@ describe('POST /signup', function() {
         .expect(302)
         .end(function(err, res) {
           expect(err).to.not.exist;
-          User.find(function(err, users) {
+          User.findByUsername(valid_form.username, function(err, user) {
             expect(err).to.not.exist;
-            expect(users).to.have.length(1);
-            var user = users[0];
             expect(user).to.have.deep.property('name.first', 'Alexis');
             expect(user).to.have.deep.property('name.last', 'GRIMALDI');
             expect(user).to.have.property('username', 'agrimaldi');
