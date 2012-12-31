@@ -63,7 +63,7 @@ userSchema.statics.checkCredentials = function(username, password, callback) {
       callback(new Error('AuthFailed : Username does not exist'));
     }
     else {
-      if(password === user.password) {
+      if(password === user.passwordHash) {
         util.log('Authenticated User ' + username);
         callback(null, user);
       }

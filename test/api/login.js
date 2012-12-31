@@ -11,7 +11,7 @@ var expect = require('chai').expect
 beforeEach(function(done) {
   var userOne = new User({
     username: 'agrimaldi',
-    password: 'qwe',
+    passwordHash: 'qwe',
     admin: true,
     email: 'agrimaldi@asd.com'
   });
@@ -35,7 +35,7 @@ describe('POST /login', function() {
           expect(res.body).to.have.property('retStatus', 'success');
           expect(res.body).to.have.property('user');
           expect(res.body.user).to.have.keys(['__v', 'bookmarks',
-            'username', 'password', 'admin', 'email', '_id'
+            'username', 'passwordHash', 'admin', 'email', '_id'
           ]);
           done();
         });
