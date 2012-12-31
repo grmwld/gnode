@@ -14,7 +14,7 @@ describe('POST /signup', function() {
     name: {
       first: 'Alexis',
       last: 'GRIMALDI'
-    }
+    },
     username: 'agrimaldi',
     password: 'secret',
     password_confirm: 'secret',
@@ -24,7 +24,7 @@ describe('POST /signup', function() {
     name: {
       first: 'Alexis',
       last: ''
-    }
+    },
     username: 'agrimaldi',
     password: 'secret',
     password_confirm: 'terces',
@@ -34,7 +34,7 @@ describe('POST /signup', function() {
 
   describe('with valid form', function() {
 
-    it('redirects to /dashboard if the form is valid', function(done) {
+    it('redirects to /dashboard', function(done) {
       request(app)
         .post('/signup')
         .send(valid_form)
@@ -45,7 +45,7 @@ describe('POST /signup', function() {
           done();
         });
     });
-    it('should create a new User', function() {
+    it('should create a new User', function(done) {
       request(app)
         .post('/signup')
         .send(valid_form)
