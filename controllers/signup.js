@@ -8,7 +8,7 @@
 var route = function(app) {
   
   /**
-   * Route to homepage
+   * Signup page
    *
    * @handle {Route#GET} /signup
    */
@@ -16,6 +16,15 @@ var route = function(app) {
     res.render('signup', {
       title: 'GStrider signup'
     });
+  });
+
+  /**
+   * POST the signup form
+   *
+   * @handle {Route#POST} /signup
+   */
+  app.post('/signup', function(req, res) {
+    res.redirect('/account')
   });
 
 };
