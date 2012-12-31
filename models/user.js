@@ -35,6 +35,7 @@ var userSchema = new Schema({
     last: String
   },
   passwordHash: String,
+  password: String,
   email: {
     type: String,
     set: toLower,
@@ -54,11 +55,13 @@ var userSchema = new Schema({
  * Hash the password synchronously
  */
 userSchema.pre('save', function(next) {
-  this.hashPassword(this.password, function(err, hash) {
-    this.passwordHash = hash;
-    delete this.password;
+  var user = this;
+  userSchema.statics.hashPassword(user.password, function(err, hash) {
+    user.passwordHash = hash;
+    user.password = '';
     next();
   });
+  //next();
 });
 
 
@@ -66,6 +69,20 @@ userSchema.pre('save', function(next) {
 /*************
  *  Methods  *
  *************/
+
+/**
+ * Check if a user password matches a candidated password
+ *
+ * @param {String} username
+ * @param {String} password
+ * @param {Function} callback
+ */
+userSchema.methods.checkPassword = function(password, callback) {
+  bcrypt.compare(password, this.passwordHash, function(err, isMatch) {
+    if (err) return callback(err);
+    callback(null, isMatch);
+  });
+};
 
 
 
@@ -91,18 +108,27 @@ userSchema.statics.findByUsername = function(username, callback) {
  * @param {Function} callback
  */
 userSchema.statics.checkCredentials = function(username, password, callback) {
-  this.findByUsername(username, function(err, user) {
+  var self = this;
+  self.findByUsername(username, function(err, user) {
+    if (err) {
+      callback(err);
+    }
     if(!user) {
       callback(new Error('AuthFailed : Username does not exist'));
     }
     else {
-      if(password === user.passwordHash) {
-        util.log('Authenticated User ' + username);
-        callback(null, user);
-      }
-      else {
-        callback(new Error('AuthFailed : Invalid Password'));
-      }
+      user.checkPassword(password, function(err, isMatch) {
+        if (err) {
+          callback(err);
+        }
+        if(isMatch) {
+          util.log('Authenticated User ' + username);
+          callback(null, user);
+        }
+        else {
+          callback(new Error('AuthFailed : Invalid Password'));
+        }
+      });
     }
   });
 };
@@ -114,19 +140,8 @@ userSchema.statics.checkCredentials = function(username, password, callback) {
  * @param {Function} callback
  */
 userSchema.statics.hashPassword = function(password, callback) {
-    var BCRYPT_COST = (process.env.NODE_ENV === 'test') ? 1 : 10;
-    bcrypt.hash(password, BCRYPT_COST, callback);
-};
-
-/**
- * compare a password to a hashed password
- *
- * @param {String} password
- * @param {String} hash
- * @param {Function} callback
- */
-userSchema.statics.comparePasswordAndHash = function(password, hash, callback) {
-    bcrypt.compare(password, hash, callback);
+  var BCRYPT_COST = (process.env.NODE_ENV === 'test') ? 1 : 10;
+  bcrypt.hash(password, BCRYPT_COST, callback);
 };
 
 
