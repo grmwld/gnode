@@ -1,3 +1,7 @@
+/*************************
+ *  Module dependencies  *
+ *************************/
+
 var util = require('util')
   , bcrypt = require('bcrypt')
   , mongoose = require('mongoose')
@@ -5,10 +9,20 @@ var util = require('util')
   ;
 
 
+
+/***********************
+ *  Utility functions  *
+ ***********************/
+
 var toLower = function(string) {
   return string.toLowerCase();
 };
 
+
+
+/**********************
+ *  Shema definition  *
+ **********************/
 
 var userSchema = new Schema({
   username: {
@@ -31,14 +45,33 @@ var userSchema = new Schema({
 });
 
 
+
+/*****************
+ *  Middlewares  *
+ *****************/
+
 /**
- * Methods
+ * Hash the password synchronously
  */
+userSchema.pre('save', function(next) {
+  this.hashPassword(this.password, function(err, hash) {
+    this.passwordHash = hash;
+    delete this.password;
+    next();
+  });
+});
 
 
-/**
- * Statics
- */
+
+/*************
+ *  Methods  *
+ *************/
+
+
+
+/*************
+ *  Statics  *
+ *************/
 
 /**
  * Find a user by its username
@@ -95,6 +128,7 @@ userSchema.statics.hashPassword = function(password, callback) {
 userSchema.statics.comparePasswordAndHash = function(password, hash, callback) {
     bcrypt.compare(password, hash, callback);
 };
+
 
 
 exports.User = mongoose.model('User', userSchema);
