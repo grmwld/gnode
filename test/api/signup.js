@@ -69,4 +69,21 @@ describe('POST /signup', function() {
   });
 
 
+  describe('with invalid form', function() {
+  
+    it('should redirect to /signup', function(done) {
+      request(app)
+        .post('/signup')
+        .send(invalid_form)
+        .expect(302)
+        .end(function(err, res) {
+          expect(err).to.not.exist;
+          expect(res.header.location).to.include('/signup');
+          done();
+        });
+    });
+  
+  });
+
+
 });
