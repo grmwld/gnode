@@ -41,6 +41,55 @@ describe('User', function() {
   });
 
 
+  describe('.hashPassword()', function() {
+    
+    it('should return a hashed password asynchronously', function(done) {
+      var password = 'secret';
+      User.hashPassword(password, function(err, passwordHash) {
+        expect(err).to.not.exist;
+        expect(passwordHash).to.exist;
+        done();
+      });
+    });
+
+  });
+
+
+  describe('.checkPassword()', function() {
+
+    beforeEach(function(done) {
+      User.remove(function(err) {
+        User.create(new_user, function(err, created_user) {
+          done(err);
+        });
+      });
+    });
+
+    it('should return true if password is valid', function(done) {
+      User.findByUsername(new_user.username, function(err, user) {
+        expect(err).to.not.exist;
+        user.checkPassword(new_user.password, function(err, isMatch) {
+          expect(err).to.not.exist;
+          expect(isMatch).to.be.true;
+          done();
+        });
+      });
+    });
+    it('should return false if password is invalid', function(done) {
+      var fakepassword = 'hackpass';
+      User.findByUsername(new_user.username, function(err, user) {
+        expect(err).to.not.exist;
+        user.checkPassword(fakepassword, function(err, isMatch) {
+          expect(err).to.not.exist;
+          expect(isMatch).to.be.false;
+          done();
+        });
+      });
+    });
+
+  });
+
+
   describe('.checkCredentials()', function() {
 
     var credentials = {
@@ -114,53 +163,4 @@ describe('User', function() {
   });
 
   
-  describe('.hashPassword()', function() {
-    
-    it('should return a hashed password asynchronously', function(done) {
-      var password = 'secret';
-      User.hashPassword(password, function(err, passwordHash) {
-        expect(err).to.not.exist;
-        expect(passwordHash).to.exist;
-        done();
-      });
-    });
-
-  });
-
-
-  describe('.checkPassword()', function() {
-
-    beforeEach(function(done) {
-      User.remove(function(err) {
-        User.create(new_user, function(err, created_user) {
-          done(err);
-        });
-      });
-    });
-
-    it('should return true if password is valid', function(done) {
-      User.findByUsername(new_user.username, function(err, user) {
-        expect(err).to.not.exist;
-        user.checkPassword(new_user.password, function(err, isMatch) {
-          expect(err).to.not.exist;
-          expect(isMatch).to.be.true;
-          done();
-        });
-      });
-    });
-    it('should return false if password is invalid', function(done) {
-      var fakepassword = 'hackpass';
-      User.findByUsername(new_user.username, function(err, user) {
-        expect(err).to.not.exist;
-        user.checkPassword(fakepassword, function(err, isMatch) {
-          expect(err).to.not.exist;
-          expect(isMatch).to.be.false;
-          done();
-        });
-      });
-    });
-
-  });
-
-
 });
