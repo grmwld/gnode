@@ -54,10 +54,10 @@ describe('POST /signup', function() {
           expect(err).to.not.exist;
           User.findByUsername(valid_form.username, function(err, user) {
             expect(err).to.not.exist;
-            expect(user).to.have.deep.property('name.first', 'Alexis');
-            expect(user).to.have.deep.property('name.last', 'GRIMALDI');
-            expect(user).to.have.property('username', 'agrimaldi');
-            expect(user).to.have.property('email', 'agrimaldi@gstrider.org');
+            expect(user).to.have.deep.property('name.first', valid_form.name.first);
+            expect(user).to.have.deep.property('name.last', valid_form.name.last);
+            expect(user).to.have.property('username', valid_form.username);
+            expect(user).to.have.property('email', valid_form.email);
             expect(user).to.have.property('passwordHash');
             done();
           });
