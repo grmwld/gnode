@@ -34,14 +34,14 @@ describe('POST /signup', function() {
 
   describe('with valid form', function() {
 
-    it('redirects to /dashboard', function(done) {
+    it('redirects to /account', function(done) {
       request(app)
         .post('/signup')
         .send(valid_form)
         .expect(302)
         .end(function(err, res) {
           expect(err).to.not.exist;
-          expect(res.header.location).to.include('/dashboard');
+          expect(res.header.location).to.include('/account');
           done();
         });
     });
