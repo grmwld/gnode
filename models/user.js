@@ -14,13 +14,17 @@ var userSchema = new Schema({
   username: {
     type: String,
     set: toLower,
-    index: { uniq: true }
+    uniq: true
   },
-  password: String,
+  name: {
+    first: String,
+    last: String
+  },
+  passwordHash: String,
   email: {
     type: String,
     set: toLower,
-    index: { uniq: true }
+    uniq: true
   },
   admin: Boolean,
   bookmarks: Array,

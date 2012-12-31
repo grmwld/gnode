@@ -11,15 +11,23 @@ var expect = require('chai').expect
 describe('POST /signup', function() {
 
   var valid_form = {
+    name: {
+      first: 'Alexis',
+      last: 'GRIMALDI'
+    }
     username: 'agrimaldi',
-    password: 'qwe',
-    password_confirm: 'qwe',
+    password: 'secret',
+    password_confirm: 'secret',
     email: 'agrimaldi@gstrider.org'
   };
   var invalid_form = {
+    name: {
+      first: 'Alexis',
+      last: ''
+    }
     username: 'agrimaldi',
-    password: 'qwe',
-    password_confirm: 'lskd',
+    password: 'secret',
+    password_confirm: 'terces',
     email: ''
   };
 
@@ -48,6 +56,8 @@ describe('POST /signup', function() {
             expect(err).to.not.exist;
             expect(users).to.have.length(1);
             var user = users[0];
+            expect(user).to.have.deep.property('name.first', 'Alexis');
+            expect(user).to.have.deep.property('name.last', 'GRIMALDI');
             expect(user).to.have.property('username', 'agrimaldi');
             expect(user).to.have.property('email', 'agrimaldi@gstrider.org');
             expect(user).to.have.property('passwordHash');
