@@ -128,25 +128,33 @@ describe('User', function() {
   });
 
 
-  describe('.comparePasswordAndHash()', function() {
+  describe('.checkPassword()', function() {
 
-    var password = 'secret'
-      , fakepassword = 'hackpass';
+    beforeEach(function(done) {
+      User.remove(function(err) {
+        User.create(new_user, function(err, created_user) {
+          done(err);
+        });
+      });
+    });
 
     it('should return true if password is valid', function(done) {
-      User.hashPassword(password, function(err, hash) {
-        User.comparePasswordAndHash(password, hash, function(err, areEqual) {
+      User.findByUsername(new_user.username, function(err, user) {
+        expect(err).to.not.exist;
+        user.checkPassword(new_user.password, function(err, isMatch) {
           expect(err).to.not.exist;
-          expect(areEqual).to.be.true;
+          expect(isMatch).to.be.true;
           done();
         });
       });
     });
     it('should return false if password is invalid', function(done) {
-      User.hashPassword(password, function(err, hash) {
-        User.comparePasswordAndHash(fakepassword, hash, function(err, areEqual) {
+      var fakepassword = 'hackpass';
+      User.findByUsername(new_user.username, function(err, user) {
+        expect(err).to.not.exist;
+        user.checkPassword(fakepassword, function(err, isMatch) {
           expect(err).to.not.exist;
-          expect(areEqual).to.be.false;
+          expect(isMatch).to.be.false;
           done();
         });
       });
