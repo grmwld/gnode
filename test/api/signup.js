@@ -28,10 +28,11 @@ describe('POST /signup', function() {
       request(app)
         .post('/signup')
         .send(form)
-        .expect(302)
+        .expect(200)
         .end(function(err, res) {
           expect(err).to.not.exist;
-          expect(res.header.location).to.include('/account');
+          expect(res.body).to.have.property('redirect');
+          expect(res.body['redirect']).to.include('/account');
           done();
         });
     });
@@ -39,7 +40,7 @@ describe('POST /signup', function() {
       request(app)
         .post('/signup')
         .send(form)
-        .expect(302)
+        .expect(200)
         .end(function(err, res) {
           expect(err).to.not.exist;
           User.findByUsername(form.username, function(err, user) {

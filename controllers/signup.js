@@ -38,6 +38,7 @@ var route = function(app) {
     
     errors = req.validationErrors();
     if (errors) {
+      //res.send({ redirect: '/signup' });
       return res.redirect('/signup');
     }
 
@@ -52,7 +53,8 @@ var route = function(app) {
     };
     User.create(new_user, function(err, created_user) {
       if (err) throw err;
-      return res.redirect('/account');
+      res.send({ redirect: '/account' });
+      //return res.redirect('/account');
     });
   });
 

@@ -29,7 +29,12 @@ define([ 'jquery' ], function($) {
         type: 'POST',
         url: '/signup',
         data: signup_form,
-        datatype: 'json'
+        datatype: 'json',
+        success: function(result) {
+          if (result['redirect']) {
+            window.location.href = result['redirect'];
+          }
+        },
       }); 
     });
   };
