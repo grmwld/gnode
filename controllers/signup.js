@@ -1,3 +1,4 @@
+var User = require('../models/user').User;
 
 /**
  * Function used to handle the routing associated to
@@ -24,6 +25,7 @@ var route = function(app) {
    * @handle {Route#POST} /signup
    */
   app.post('/signup', function(req, res) {
+    var new_user = null;
     req.onValidationError(function(msg) {
       return res.redirect('/signup');
     });
@@ -33,7 +35,19 @@ var route = function(app) {
     req.check('username', 'Please enter your desired username').len(1);
     req.check('name.first', 'Please enter your first name').len(1);
     req.check('name.last', 'Please enter your last name').len(1);
-    res.redirect('/account');
+    new_user = {
+      name: {
+        first: req.body.name.first,
+        last: req.body.name.last
+      },
+      username: req.body.username,
+      password: req.body.password,
+      email: req.body.email
+    };
+    User.create(new_user, function(err, created_user) {
+      if (err) throw err;
+      return res.redirect('/account');
+    });
   });
 
 };

@@ -48,6 +48,7 @@ describe('POST /signup', function() {
             expect(user).to.have.deep.property('name.last', form.name.last);
             expect(user).to.have.property('username', form.username);
             expect(user).to.have.property('email', form.email);
+            expect(user).to.have.property('password', '');
             expect(user).to.have.property('passwordHash');
             done();
           });
