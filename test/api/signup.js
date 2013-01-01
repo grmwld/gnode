@@ -10,34 +10,24 @@ var expect = require('chai').expect
   
 describe('POST /signup', function() {
 
-  var valid_form = {
-    name: {
-      first: 'Alexis',
-      last: 'GRIMALDI'
-    },
-    username: 'agrimaldi-signuptest',
-    password: 'secret',
-    password_confirm: 'secret',
-    email: 'agrimaldi@gstrider.org'
-  };
-  var invalid_form = {
-    name: {
-      first: 'Alexis',
-      last: ''
-    },
-    username: 'agrimaldi',
-    password: 'secret',
-    password_confirm: 'terces',
-    email: ''
-  };
-
 
   describe('with valid form', function() {
+
+    var form = {
+      name: {
+        first: 'Alexis',
+        last: 'GRIMALDI'
+      },
+      username: 'agrimaldi-signuptest',
+      password: 'secret',
+      password_confirm: 'secret',
+      email: 'agrimaldi@gstrider.org'
+    };
 
     it('redirects to /account', function(done) {
       request(app)
         .post('/signup')
-        .send(valid_form)
+        .send(form)
         .expect(302)
         .end(function(err, res) {
           expect(err).to.not.exist;
@@ -48,16 +38,16 @@ describe('POST /signup', function() {
     it('should create a new User', function(done) {
       request(app)
         .post('/signup')
-        .send(valid_form)
+        .send(form)
         .expect(302)
         .end(function(err, res) {
           expect(err).to.not.exist;
-          User.findByUsername(valid_form.username, function(err, user) {
+          User.findByUsername(form.username, function(err, user) {
             expect(err).to.not.exist;
-            expect(user).to.have.deep.property('name.first', valid_form.name.first);
-            expect(user).to.have.deep.property('name.last', valid_form.name.last);
-            expect(user).to.have.property('username', valid_form.username);
-            expect(user).to.have.property('email', valid_form.email);
+            expect(user).to.have.deep.property('name.first', form.name.first);
+            expect(user).to.have.deep.property('name.last', form.name.last);
+            expect(user).to.have.property('username', form.username);
+            expect(user).to.have.property('email', form.email);
             expect(user).to.have.property('passwordHash');
             done();
           });
@@ -69,10 +59,21 @@ describe('POST /signup', function() {
 
   describe('with invalid form', function() {
   
+    var form = {
+      name: {
+        first: 'Alexis',
+        last: ''
+      },
+      username: 'agrimaldi',
+      password: 'secret',
+      password_confirm: 'terces',
+      email: ''
+    };
+
     it('should redirect to /signup', function(done) {
       request(app)
         .post('/signup')
-        .send(invalid_form)
+        .send(form)
         .expect(302)
         .end(function(err, res) {
           expect(err).to.not.exist;

@@ -8,73 +8,96 @@ var expect = require('chai').expect
   ;
 
   
-beforeEach(function(done) {
-  var userOne = new User({
-    name: {
-      first: 'Alexis',
-      last: 'GRIMALDI'
-    },
-    username: 'agrimaldi',
-    passwordHash: 'secret',
-    admin: true,
-    email: 'agrimaldi@asd.com'
-  });
-  userOne.save(done);
-});
+var new_user = {
+  name: {
+    first: 'Alexis',
+    last: 'GRIMALDI'
+  },
+  username: 'agrimaldi',
+  password: 'secret',
+  admin: true,
+  email: 'agrimaldi@gstrider.org'
+};
+
 
 
 describe('POST /login', function() {
 
+  beforeEach(function(done) {
+    User.remove(function(err) {
+      User.create(new_user, function(err, created_user) {
+        done(err);
+      });
+    });
+  });
+
+
   describe('with valid credentials', function() {
+
+    var valid_credentials = {
+      username: new_user.username,
+      password: new_user.password
+    };
+
     it('reponds favorabily to login attempt', function(done) {
       request(app)
         .post('/login')
-        .send({
-          username: 'agrimaldi',
-          password: 'secret'
-        })
+        .send(valid_credentials)
         .expect(200)
         .end(function(err, res) {
           expect(err).to.not.exist;
           expect(res.body).to.have.property('retStatus', 'success');
           expect(res.body).to.have.property('user');
           expect(res.body.user).to.have.keys(['__v', 'bookmarks', 'name',
-            'username', 'passwordHash', 'admin', 'email', '_id'
+            'username', 'passwordHash', 'admin', 'email', '_id', 'password'
           ]);
-          expect(res.body.user).to.have.deep.property('username', 'agrimaldi');
-          expect(res.body.user).to.have.deep.property('name.first', 'Alexis');
-          expect(res.body.user).to.have.deep.property('name.last', 'GRIMALDI');
+          expect(res.body.user).to.have.deep.property('username', new_user.username);
+          expect(res.body.user).to.have.deep.property('name.first', new_user.name.first);
+          expect(res.body.user).to.have.deep.property('name.last', new_user.name.last);
+          expect(res.body.user).to.have.deep.property('password', '');
           done();
         });
     });
+
   });
+
 
   describe('with invalid credentials', function() {
+
+    var invalid_password = 'hackpass';
+
     it('reponds infavorabily to login attempt', function(done) {
       request(app)
         .post('/login')
         .send({
-          username: 'agrimaldi',
-          password: 'qweasda'
+          username: new_user.username,
+          password: invalid_password
         })
         .expect({
           retStatus: 'failure',
         }, done);
     });
+
   });
 
+
   describe('with non-existent user', function() {
+    
+    var non_existent_user = 'non-existent';
+
     it('reponds infavorabily to login attempt', function(done) {
       request(app)
         .post('/login')
         .send({
-          username: 'non-existent',
-          password: 'qwe'
+          username: non_existent_user,
+          password: new_user.password
         })
         .expect({
           retStatus: 'failure',
         }, done);
     });
+
   });
+
 
 });
