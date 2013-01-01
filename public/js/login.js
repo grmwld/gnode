@@ -37,5 +37,5 @@ define([ 'jquery' ], function($) {
 
   return {
     initialize: initialize
-  }
+  };
 });

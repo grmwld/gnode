@@ -1,4 +1,6 @@
-//Filename: boilerplate.js
+/**
+ * Signup module
+ */
 
 define([ 'jquery' ], function($) {
 
@@ -7,13 +9,29 @@ define([ 'jquery' ], function($) {
       
       event.preventDefault();
 
-      var username = $('#username').val()
-        , password = $('#password').val();
+      var form = {};
+      $(this).find('input, textarea, select').each(function(i, field) {
+        form[field.name] = field.value;
+      });
 
-      /*
-       * Do this check because the form submits even on Sign Up
-       * button click
-       */
+      var signup_form = {
+        name: {
+          first: form['firstname'],
+          last: form['lastname']
+        },
+        username: form['username'],
+        password: form['password'],
+        password_confirm: form['password_confirm'],
+        email: form['email']
+      };
+
+      $.ajax({
+        type: 'POST',
+        url: '/signup',
+        data: signup_form,
+        datatype: 'json'
+      }); 
+    });
   };
 
   return {
