@@ -7,7 +7,6 @@ var expect = require('chai').expect
 
 
 
-
 describe('User', function() {
 
   var new_user = {
@@ -18,25 +17,76 @@ describe('User', function() {
     username: 'agrimaldi-model',
     password: 'secret',
     admin: true,
-    email: 'agrimaldi@asd.com'
+    email: 'agrimaldi@gstrider.org'
   };
 
 
   describe('.create()', function() {
     
-    it('should create a new user in the database', function(done) {
-      User.create(new_user, function(err, created_user) {
-        expect(err).to.not.exist;
-        expect(created_user).to.have.deep.property('name.first', new_user.name.first);
-        expect(created_user).to.have.deep.property('name.last', new_user.name.last);
-        expect(created_user).to.have.property('username', new_user.username);
-        expect(created_user).to.have.property('email', new_user.email);
-        expect(created_user).to.have.property('password', '');
-        expect(created_user).to.have.property('passwordHash');
-        expect(created_user.passwordHash).to.not.equal(new_user.password);
-        done();
+    describe('a new user', function() {
+      it('should create a new user in the database', function(done) {
+        User.create(new_user, function(err, created_user) {
+          expect(err).to.not.exist;
+          expect(created_user).to.have.deep.property('name.first', new_user.name.first);
+          expect(created_user).to.have.deep.property('name.last', new_user.name.last);
+          expect(created_user).to.have.property('username', new_user.username);
+          expect(created_user).to.have.property('email', new_user.email);
+          expect(created_user).to.have.property('password', '');
+          expect(created_user).to.have.property('passwordHash');
+          expect(created_user.passwordHash).to.not.equal(new_user.password);
+          done();
+        });
       });
     });
+
+    describe('a duplicate user', function() {
+
+      beforeEach(function(done) {
+        User.remove(function(err) {
+          User.create(new_user, function(err, created_user) {
+            done(err);
+          });
+        });
+      });
+
+      it('with unavailable username', function(done) {
+        var new_user = {
+          name: {
+            first: 'Alexis',
+            last: 'GRIMALDI'
+          },
+          username: 'agrimaldi-model',
+          password: 'secret',
+          admin: true,
+          email: 'agrimaldi2@gstrider.org'
+        };
+        User.create(new_user, function(err, created_user) {
+          expect(err).to.be.an.instanceof(Error);
+          expect(err.message).to.equal('Unavailable username');
+          expect(created_user).to.not.exist;
+          done();
+        });
+      });
+      it('with unavailable email', function(done) {
+        var new_user = {
+          name: {
+            first: 'Alexis',
+            last: 'GRIMALDI'
+          },
+          username: 'agrimaldi-2-model',
+          password: 'secret',
+          admin: true,
+          email: 'agrimaldi@gstrider.org'
+        };
+        User.create(new_user, function(err, created_user) {
+          expect(err).to.be.an.instanceof(Error);
+          expect(err.message).to.equal('Unavailable email');
+          expect(created_user).to.not.exist;
+          done();
+        });
+      });
+    });
+
 
   });
 

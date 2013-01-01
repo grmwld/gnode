@@ -28,7 +28,7 @@ var userSchema = new Schema({
   username: {
     type: String,
     set: toLower,
-    uniq: true
+    unique: true
   },
   name: {
     first: String,
@@ -39,7 +39,7 @@ var userSchema = new Schema({
   email: {
     type: String,
     set: toLower,
-    uniq: true
+    unique: true
   },
   admin: Boolean,
   bookmarks: Array,
@@ -55,14 +55,49 @@ var userSchema = new Schema({
  * Hash the password synchronously
  */
 userSchema.pre('save', function(next) {
-  var user = this;
-  userSchema.statics.hashPassword(user.password, function(err, hash) {
-    user.passwordHash = hash;
-    user.password = '';
+  var self = this;
+  userSchema.statics.hashPassword(self['password'], function(err, hash) {
+    if (err) next(err);
+    self['passwordHash'] = hash;
+    self['password'] = '';
     next();
   });
-  //next();
 });
+
+/**
+ * Check that the username is available
+ */
+userSchema.pre('save', function(next) {
+  var self = this;
+  mongoose.models['User'].findByUsername(self['username'], function(err, user) {
+    if (err) next(err);
+    if (user) {
+      self.invalidate('username', 'Unavailable username');
+      next(new Error('Unavailable username'));
+    }
+    next();
+  });
+});
+
+/**
+ * Check that the email address is available
+ */
+userSchema.pre('save', function(next) {
+  var self = this;
+  mongoose.models['User'].findByEmail(self['email'], function(err, user) {
+    if (err) next(err);
+    if (user) {
+      self.invalidate('email', 'Unavailable email');
+      next(new Error('Unavailable email'));
+    }
+    next();
+  });
+});
+
+
+/****************
+ *  Validators  *
+ ****************/
 
 
 
@@ -98,7 +133,17 @@ userSchema.methods.checkPassword = function(password, callback) {
  */
 userSchema.statics.findByUsername = function(username, callback) {
   this.findOne({username: username}, callback);
-}
+};
+
+/**
+ * Find a user by its email
+ *
+ * @param {String} email
+ * @param {Function} callback
+ */
+userSchema.statics.findByEmail = function(email, callback) {
+  this.findOne({email: email}, callback);
+};
 
 /**
  * Find a user by its username
