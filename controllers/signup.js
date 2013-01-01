@@ -25,16 +25,22 @@ var route = function(app) {
    * @handle {Route#POST} /signup
    */
   app.post('/signup', function(req, res) {
-    var new_user = null;
-    req.onValidationError(function(msg) {
+    var new_user = null
+      , errors = null
+    ;
+    req.check('email', 'Invalid email').isEmail();
+    req.check('password', 'Password must be between 4 and 34 characters').len(4, 34);
+    req.check('password_confirm', 'Passwords do not match').equals(req.body.password);
+    req.check('username', 'Username must be at least 3 character long').len(3);
+    req.check('username', 'Valid characters for Username include alphanumeric characters, dash (-) and underscore (_) ').is(/[A-Za-z\-_]+/);
+    req.check('name.first', 'First name must be composed of letters').isAlpha();
+    req.check('name.last', 'Last name must be composed of letters').isAlpha();
+    
+    errors = req.validationErrors();
+    if (errors) {
       return res.redirect('/signup');
-    });
-    req.check('email', 'Please enter a valid email').len(1).isEmail();
-    req.check('password', 'Please enter a password with a length between 4 and 34 digits').len(4, 34);
-    req.check('password_confirm', 'Please confirm your password').equals(req.body.password);
-    req.check('username', 'Please enter your desired username').len(1);
-    req.check('name.first', 'Please enter your first name').len(1);
-    req.check('name.last', 'Please enter your last name').len(1);
+    }
+
     new_user = {
       name: {
         first: req.body.name.first,
