@@ -10,22 +10,20 @@ var expect = require('chai').expect
   
 describe('POST /signup', function() {
 
-
-  describe('with valid form', function() {
-
-    var form = {
-      name: {
-        first: 'Alexis',
-        last: 'GRIMALDI'
-      },
-      username: 'agrimaldi-signuptest',
-      password: 'secret',
-      password_confirm: 'secret',
-      email: 'agrimaldi@gstrider.org'
-    };
+  
+  describe('a new user', function() {
     
-    describe('a new user', function() {
-
+    describe('with a valid form', function() {
+      var form = {
+        name: {
+          first: 'Alexis',
+          last: 'GRIMALDI'
+        },
+        username: 'agrimaldi-signuptest',
+        password: 'secret',
+        password_confirm: 'secret',
+        email: 'agrimaldi@gstrider.org'
+      };
       it('redirects to /account', function(done) {
         request(app)
           .post('/signup')
@@ -60,92 +58,19 @@ describe('POST /signup', function() {
       });
     });
 
-    describe('a duplicate user', function() {
-
-      beforeEach(function(done) {
-        User.remove(function(err) {
-          User.create(form, function(err, created_user) {
-            done(err);
-          });
-        });
-      });
-
-      describe('with unavailable username', function() {
-
-        var user = {
-          name: {
-            first: 'Alexis',
-            last: 'GRIMALDI'
-          },
-          username: 'agrimaldi-signuptest',
-          password: 'secret',
-          password_confirm: 'secret',
-          email: 'agrimaldi2@gstrider.org'
-        };
-
-        it('redirects to /account', function(done) {
-          request(app)
-            .post('/signup')
-            .send(user)
-            .expect(200)
-            .end(function(err, res) {
-              expect(err).to.not.exist;
-              expect(res.body).to.have.property('redirect', false);
-              expect(res.body).to.have.property('error', 'Unavailable username');
-              done();
-            });
-        });
-
-      });
-
-      describe('with unavailable email', function() {
-        
-        var user = {
-          name: {
-            first: 'Alexis',
-            last: 'GRIMALDI'
-          },
-          username: 'agrimaldi-2-signuptest',
-          password: 'secret',
-          password_confirm: 'secret',
-          email: 'agrimaldi@gstrider.org'
-        };
-
-        it('redirects to /account', function(done) {
-          request(app)
-            .post('/signup')
-            .send(user)
-            .expect(200)
-            .end(function(err, res) {
-              expect(err).to.not.exist;
-              expect(res.body).to.have.property('redirect', false);
-              expect(res.body).to.have.property('error', 'Unavailable email');
-              done();
-            });
-        });
-
-      });
-    });
-
-    
-  });
-
-
-  describe('with invalid form', function() {
-  
-    var form = {
-      name: {
-        first: 'Alexis',
-        last: ''
-      },
-      username: 'agrimaldi',
-      password: 'secret',
-      password_confirm: 'terces',
-      email: ''
-    };
-
-    it('should redirect to /signup', function(done) {
-      request(app)
+    describe('with an invalid form', function() {
+      var form = {
+        name: {
+          first: 'Alexis',
+          last: ''
+        },
+        username: 'agrimaldi',
+        password: 'secret',
+        password_confirm: 'terces',
+        email: ''
+      };
+      it('should redirect to /signup', function(done) {
+        request(app)
         .post('/signup')
         .send(form)
         .expect(302)
@@ -154,8 +79,82 @@ describe('POST /signup', function() {
           expect(res.header.location).to.include('/signup');
           done();
         });
+      });
     });
-  
+
+  });
+
+
+  describe('a duplicate user', function() {
+
+    var form = {
+      name: {
+        first: 'Alexis',
+        last: 'GRIMALDI'
+      },
+      username: 'agrimaldi-signuptest',
+      password: 'secret',
+      password_confirm: 'secret',
+      email: 'agrimaldi@gstrider.org'
+    };
+
+    beforeEach(function(done) {
+      User.remove(function(err) {
+        User.create(form, function(err, created_user) {
+          done(err);
+        });
+      });
+    });
+
+    describe('with unavailable username', function() {
+      var user = {
+        name: {
+          first: 'Alexis',
+          last: 'GRIMALDI'
+        },
+        username: 'agrimaldi-signuptest',
+        password: 'secret',
+        password_confirm: 'secret',
+        email: 'agrimaldi2@gstrider.org'
+      };
+      it('redirects to /account', function(done) {
+        request(app)
+          .post('/signup')
+          .send(user)
+          .expect(200)
+          .end(function(err, res) {
+            expect(err).to.not.exist;
+            expect(res.body).to.have.property('redirect', false);
+            expect(res.body).to.have.property('error', 'Unavailable username');
+            done();
+          });
+      });
+    });
+
+    describe('with unavailable email', function() {
+      var user = {
+        name: {
+          first: 'Alexis',
+          last: 'GRIMALDI'
+        },
+        username: 'agrimaldi-2-signuptest',
+        password: 'secret',
+        password_confirm: 'secret',
+        email: 'agrimaldi@gstrider.org'
+      };
+      it('redirects to /account', function(done) {
+        request(app)
+          .post('/signup')
+          .send(user)
+          .expect(200)
+          .end(function(err, res) {
+            expect(err).to.not.exist;
+            expect(res.body).to.have.property('redirect', false);
+            expect(res.body).to.have.property('error', 'Unavailable email');
+            done();
+          });
+      });
+    });
   });
 
 
