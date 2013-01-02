@@ -1,5 +1,5 @@
 var User = require('../models/user').User
-  ;
+;
 
 /**
  * Function used to handle the routing associated to
@@ -15,8 +15,9 @@ var route = function(app) {
    * @handle {Route#POST} /login
    */
   app.post('/login', function(req, res) {
-    var username = req.body.username;
-    var password = req.body.password;
+    var username = req.body.username
+      , password = req.body.password
+    ;
     User.checkCredentials(username, password, function(err, user) {
       if (err && !user) {
         res.send({ retStatus: 'failure' });
