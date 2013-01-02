@@ -54,7 +54,7 @@ var route = function(app) {
     User.create(new_user, function(err, created_user) {
       if (err) {
         return res.send({
-          error: err,
+          error: err.message,
           redirect: false
         });
       };
