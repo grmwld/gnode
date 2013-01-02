@@ -85,6 +85,14 @@ describe('User', function() {
           done();
         });
       });
+      //it('with both username and email being unavailable', function(done) {
+        //User.create(new_user, function(err, created_user) {
+          //expect(err).to.be.an.instanceof(Error);
+          //expect(err.message).to.equal('Unavailable email');
+          //expect(created_user).to.not.exist;
+          //done();
+        //});
+      //});
     });
 
 

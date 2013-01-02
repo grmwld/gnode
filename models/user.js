@@ -52,23 +52,19 @@ var userSchema = new Schema({
  *****************/
 
 /**
- * Hash the password synchronously
+ * Initialize availability errors
  */
-userSchema.pre('save', function(next) {
-  var self = this;
-  userSchema.statics.hashPassword(self['password'], function(err, hash) {
-    if (err) next(err);
-    self['passwordHash'] = hash;
-    self['password'] = '';
-    next();
-  });
-});
+//userSchema.pre('save', function startChecks(next, errors) {
+  //next([]);
+//});
 
 /**
  * Check that the username is available
  */
-userSchema.pre('save', function(next) {
-  var self = this;
+userSchema.pre('save', function checkUsername(next/*, errors*/) {
+  var self = this
+    //, errors = errors
+  ;
   mongoose.models['User'].findByUsername(self['username'], function(err, user) {
     if (err) next(err);
     if (user) {
@@ -82,8 +78,10 @@ userSchema.pre('save', function(next) {
 /**
  * Check that the email address is available
  */
-userSchema.pre('save', function(next) {
-  var self = this;
+userSchema.pre('save', function checkEmail(next/*, errors*/) {
+  var self = this
+    //, errors = errors
+  ;
   mongoose.models['User'].findByEmail(self['email'], function(err, user) {
     if (err) next(err);
     if (user) {
@@ -93,6 +91,28 @@ userSchema.pre('save', function(next) {
     next();
   });
 });
+
+/**
+ * Parse availability errors
+ */
+//userSchema.pre('save', function finishChecks(next, errors) {
+  //console.log(errors);
+  //next(errors);
+//});
+
+/**
+ * Hash the password synchronously
+ */
+userSchema.pre('save', function hashPassword(next) {
+  var self = this;
+  userSchema.statics.hashPassword(self['password'], function(err, hash) {
+    if (err) next(err);
+    self['passwordHash'] = hash;
+    self['password'] = '';
+    next();
+  });
+});
+
 
 
 /****************

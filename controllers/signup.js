@@ -38,7 +38,6 @@ var route = function(app) {
     
     errors = req.validationErrors();
     if (errors) {
-      //res.send({ redirect: '/signup' });
       return res.redirect('/signup');
     }
 
@@ -51,10 +50,18 @@ var route = function(app) {
       password: req.body.password,
       email: req.body.email
     };
+
     User.create(new_user, function(err, created_user) {
-      if (err) throw err;
-      res.send({ redirect: '/account' });
-      //return res.redirect('/account');
+      if (err) {
+        return res.send({
+          error: err,
+          redirect: false
+        });
+      };
+      return res.send({
+        error: null,
+        redirect: '/account'
+      });
     });
   });
 
