@@ -30,8 +30,10 @@ define([ 'jquery' ], function($) {
         data: login_form,
         datatype: 'json',
         success: function(result) {
-          if (result['redirect']) {
-            window.location.href = result['redirect'];
+          if (status === 'success') {
+            if (result['redirect']) {
+              window.location.href = result['redirect'];
+            }
           }
         },
       }); 

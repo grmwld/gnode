@@ -20,12 +20,12 @@ var route = function(app) {
     ;
     User.checkCredentials(username, password, function(err, user) {
       if (err && !user) {
-        res.send({ retStatus: 'failure' });
+        res.send({ status: 'failure' });
       }
       else {
         req.session.user = user;
         res.send({
-          retStatus: 'success',
+          status: 'success',
           user: user
         });
       }

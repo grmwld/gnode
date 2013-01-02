@@ -46,7 +46,7 @@ describe('POST /login', function() {
         .expect(200)
         .end(function(err, res) {
           expect(err).to.not.exist;
-          expect(res.body).to.have.property('retStatus', 'success');
+          expect(res.body).to.have.property('status', 'success');
           expect(res.body).to.have.property('user');
           expect(res.body.user).to.have.keys(['__v', 'bookmarks', 'name',
             'username', 'passwordHash', 'admin', 'email', '_id', 'password'
@@ -74,7 +74,7 @@ describe('POST /login', function() {
           password: invalid_password
         })
         .expect({
-          retStatus: 'failure',
+          status: 'failure',
         }, done);
     });
 
@@ -93,7 +93,7 @@ describe('POST /login', function() {
           password: new_user.password
         })
         .expect({
-          retStatus: 'failure',
+          status: 'failure',
         }, done);
     });
 
