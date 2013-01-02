@@ -6,11 +6,12 @@
 define([
     'jquery'
   , 'login'
-   //, 'javascripts/signup'
+  , 'signup'
    //, 'admin'
-], function($, Login) {
+], function($, Login, Signup) {
   var initialize = function() {
     Login.initialize();
+    Signup.initialize();
   }
   return {
     initialize: initialize
