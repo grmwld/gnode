@@ -6,6 +6,6 @@
     "bootstrap": "~2.2.2",
     "requirejs": "latest",
     "require": "~2.1.2",
-    "underscore": "~1.4.3"
+    "lodash": "~1.0.0-rc.3"
   }
 }

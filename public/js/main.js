@@ -2,14 +2,14 @@
 
 //global configuration. put the global script paths here
 requirejs.config({
-  baseUrl : '/js/'
-, paths : {
+  baseUrl: '/js/'
+, paths: {
     'jquery': 'vendor/jquery/jquery.min'
+  , 'lodash': 'vendor/lodash/lodash.min'
   , 'bootstrap': 'vendor/bootstrap/bootstrap.min'
-  , 'underscore': 'vendor/underscore/underscore-min'
   }
-, shim : {
-    'bootstrap' : ['jquery']
+, shim: {
+    'bootstrap': [ 'jquery' ]
   }
 });
 
