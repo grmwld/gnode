@@ -176,22 +176,22 @@ userSchema.statics.checkCredentials = function(username, password, callback) {
   var self = this;
   self.findByUsername(username, function(err, user) {
     if (err) {
-      callback(err);
+      callback(err, true);
     }
     if(!user) {
-      callback(new Error('AuthFailed : Username does not exist'));
+      callback(new Error('AuthFailed : Username does not exist'), false);
     }
     else {
       user.checkPassword(password, function(err, isMatch) {
         if (err) {
-          callback(err);
+          callback(err, true);
         }
         if(isMatch) {
           util.log('Authenticated User ' + username);
-          callback(null, user);
+          callback(null, false, user);
         }
         else {
-          callback(new Error('AuthFailed : Invalid Password'));
+          callback(new Error('AuthFailed : Invalid Password'), false);
         }
       });
     }

@@ -4,8 +4,9 @@
 requirejs.config({
   baseUrl : '/js/'
 , paths : {
-    'jquery' : 'vendor/jquery/jquery.min'
-  , 'bootstrap' : 'vendor/bootstrap/bootstrap.min'
+    'jquery': 'vendor/jquery/jquery.min'
+  , 'bootstrap': 'vendor/bootstrap/bootstrap.min'
+  , 'underscore': 'vendor/underscore/underscore-min'
   }
 , shim : {
     'bootstrap' : ['jquery']

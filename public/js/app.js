@@ -5,14 +5,15 @@
 //define a module here that will initialize main page widgets
 define([
     'jquery'
+  , 'underscore'
   , 'login'
   , 'signup'
    //, 'admin'
-], function($, Login, Signup) {
+], function($, _, Login, Signup) {
   var initialize = function() {
     Login.initialize();
     Signup.initialize();
-  }
+  };
   return {
     initialize: initialize
   };

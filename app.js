@@ -14,40 +14,6 @@ var express = require('express')
 
 
 /**
- * Passport configuration
- */
-var LocalStrategy = require('passport-local').Strategy;
-
-passport.serializeUser(function(user, next) {
-  next(null, user);
-});
-
-passport.deserializeUser(function(id, next){
-  next(null, id);
-});
-
-passport.use(new LocalStrategy(function(username, password, next) {
-  // asynchronous verification, for effect...
-  process.nextTick(function () {
-    User.findOne({username: username}, function(err, user) {
-      if (err) {
-        return next(err);
-      }
-      if (!user) {
-        return next(null, false, {
-          message: 'Unknown user ' + username
-        });
-      }
-      if (!user.validPassword(password)) {
-        return next(null, false, {message: 'Invalid password'});
-      }
-      return next(null, user);
-    })
-  });
-}));
-
-
-/**
  * Create the main app
  */
 var app = module.exports = express();

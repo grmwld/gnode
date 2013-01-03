@@ -28,14 +28,21 @@ define([ 'jquery' ], function($) {
         type: 'POST',
         url: '/login',
         data: login_form,
-        datatype: 'json',
+        dataType: 'json',
         success: function(result) {
-          if (status === 'success') {
-            if (result['redirect']) {
-              window.location.href = result['redirect'];
-            }
+          console.log('success', result);
+
+          if (result['redirect']) {
+            window.location.href = result['redirect'];
           }
         },
+        error: function(result) {
+          console.log('error', result);
+          if (result['redirect']) {
+            window.location.href = result['redirect'];
+          }
+        }
+        
       }); 
 
       ////
