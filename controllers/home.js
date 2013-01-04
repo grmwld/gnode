@@ -13,7 +13,6 @@ var route = function(app) {
    * @handle {Route#GET} /
    */
   app.get('/', function(req, res) {
-    console.log(res.locals.session);
     res.render('home', {
       title: 'GStrider'
     });

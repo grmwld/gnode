@@ -2,7 +2,7 @@
  * Login module
  */
 
-define([ 'jquery' ], function($) {
+define([ 'jquery', 'notifications' ], function($, Notifications) {
 
   var initialize = function() {
 
@@ -24,29 +24,28 @@ define([ 'jquery' ], function($) {
         password: form['password']
       };
 
-      $.ajax({
-        type: 'POST',
-        url: '/login',
-        data: login_form,
-        dataType: 'json',
-        success: function(result) {
-          console.log('success', result);
+      if (username && password) {
+        $.ajax({
+          type: 'POST',
+          url: '/login',
+          data: login_form,
+          dataType: 'json',
+          success: function(result) {
+            Notifications.dispatch(result.info);
 
-          if (result['redirect']) {
-            window.location.href = result['redirect'];
+            if (result['redirect']) {
+              setTimeout(function() {
+                window.location.href = result['redirect'];
+              }, 1500);
+            }
+          },
+          error: function(jqXHR) {
+            var result = $.parseJSON(jqXHR['responseText']);
+            Notifications.dispatch(result.info);
           }
-        },
-        error: function(result) {
-          console.log('error', result);
-          if (result['redirect']) {
-            window.location.href = result['redirect'];
-          }
-        }
-        
-      }); 
+        }); 
+      }
 
-      ////
-      ///
       //
       //if(username && password) {
         //$.post('/login', $(this).serialize(), function(response) {

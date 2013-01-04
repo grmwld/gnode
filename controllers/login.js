@@ -25,9 +25,15 @@ passport.use(new LocalStrategy(function(username, password, callback) {
       if (fatal) {
         return callback(err);
       }
-      return callback(null, false, { message: err.message });
-    };
-    return callback(null, user, { message: 'Welcome ' + username });
+      return callback(null, false, {
+        level: 'error',
+        message: err.message
+      });
+    }
+    return callback(null, user, {
+      level: 'success',
+      message: 'Welcome ' + username
+    });
   });
 }));
 
@@ -47,19 +53,17 @@ var route = function(app) {
    */
   app.post('/login', function(req, res, next) {
     passport.authenticate('local', function(err, user, info) {
-      console.log(err, user, info);
       if (err) return next(err);
       if (!user) {
-        return res.send(401, {
+        return res.json(401, {
           status: 'failure',
           info: info,
-          redirect: '/',
           user: null
         });
       }
       req.login(user, function(err) {
         if (err) return next(err);
-        return res.send(200, {
+        return res.json(200, {
           status: 'success',
           info: info,
           redirect: '/account',

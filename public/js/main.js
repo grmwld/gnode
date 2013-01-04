@@ -9,7 +9,9 @@ requirejs.config({
   , 'bootstrap': 'vendor/bootstrap/bootstrap.min'
   }
 , shim: {
-    'bootstrap': [ 'jquery' ]
+    'bootstrap': {
+      deps: [ 'jquery' ],
+    }
   }
 });
 
