@@ -2,6 +2,7 @@ var User = require('../models/user').User
   , _ = require('underscore')
   , passport = require('passport')
   , LocalStrategy = require('passport-local').Strategy
+  , errors = require('../lib/errors')
 ;
 
 
@@ -20,12 +21,12 @@ passport.deserializeUser(function(id, callback) {
 });
 
 passport.use(new LocalStrategy(function(username, password, callback) {
-  User.checkCredentials(username, password, function(err, fatal, user) {
+  User.checkCredentials(username, password, function(err, user) {
     if (err) {
-      if (fatal) {
+      if (!(err instanceof errors.AuthError)) {
         return callback(err);
       }
-      return callback(null, false, {
+      return callback(null, null, {
         level: 'error',
         message: err.message
       });

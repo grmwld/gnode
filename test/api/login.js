@@ -95,7 +95,7 @@ describe('POST /login', function() {
           status: 'failure',
           info: {
             'level': 'error',
-            'message': 'AuthFailed : Invalid Password'
+            'message': 'Invalid Password'
           },
           user: null
         }, done);
@@ -129,7 +129,7 @@ describe('POST /login', function() {
           status: 'failure',
           info: {
             'level': 'error',
-            'message': 'AuthFailed : Username does not exist'
+            'message': 'Username does not exist'
           },
           user: null
         }, done);
