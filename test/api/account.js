@@ -74,6 +74,7 @@ describe('GET /account', function() {
         .expect(401)
         .end(function(err, res) {
           expect(err).to.not.exist;
+          expect(res['header']['location']).to.equal('/');
           done();
         });
     });

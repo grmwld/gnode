@@ -4,14 +4,15 @@
 
 //define a module here that will initialize main page widgets
 define(
-  [ 'jquery', 'lodash', 'notifications', 'login', 'signup', 'bootstrap'],
-  function($, _, Notifications, Login, Signup) {
+  [ 'jquery', 'lodash', 'notifications', 'login', 'signup', 'account', 'bootstrap'],
+  function($, _, Notifications, Login, Signup, Account) {
 
   var initialize = function() {
 
     Notifications.initialize();
     Login.initialize();
     Signup.initialize();
+    Account.initialize();
 
   };
   
