@@ -32,11 +32,22 @@ define([ 'jquery', 'notifications' ], function($, Notifications) {
         data: signup_form,
         datatype: 'json',
         success: function(result) {
-          Notifications.dispatch(result.info)
-          if (result['redirect']) {
-            setTimeout(function() {
-              window.location.href = result['redirect'];
-            }, 1500);
+          Notifications.dispatch(result.info);
+          if (result['status'] === 'success') {
+            $.ajax({
+              type: 'POST',
+              url: '/login',
+              data: {
+                username: signup_form['username'],
+                password: signup_form['password']
+              },
+              dataType: 'json',
+              success: function(result) {
+                setTimeout(function() {
+                  window.location.href = result['redirect'];
+                }, 1500);
+              }
+            });
           }
         }
       }); 
