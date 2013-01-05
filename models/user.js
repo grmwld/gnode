@@ -6,6 +6,7 @@ var util = require('util')
   , bcrypt = require('bcrypt')
   , mongoose = require('mongoose')
   , Schema = mongoose.Schema
+  , errors = require('../lib/errors')
   ;
 
 
@@ -179,7 +180,7 @@ userSchema.statics.checkCredentials = function(username, password, callback) {
       callback(err, true);
     }
     if(!user) {
-      callback(new Error('AuthFailed : Username does not exist'), false, null);
+      callback(new errors.AuthError('Username does not exist'), false, null);
     }
     else {
       user.checkPassword(password, function(err, isMatch) {
@@ -190,7 +191,7 @@ userSchema.statics.checkCredentials = function(username, password, callback) {
           callback(null, false, user);
         }
         else {
-          callback(new Error('AuthFailed : Invalid Password'), false, null);
+          callback(new errors.AuthError('Invalid Password'), false, null);
         }
       });
     }

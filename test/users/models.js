@@ -2,6 +2,7 @@
 
 var expect = require('chai').expect
   , utils = require('../utils')
+  , errors = require('../../lib/errors')
   , User = require('../../models/user').User
   ;
 
@@ -187,9 +188,9 @@ describe('User', function() {
       User.checkCredentials(
             credentials.nonexist.username,
             credentials.nonexist.password, function(err, fatal, user) {
-        expect(err).to.be.an.instanceof(Error);
+        expect(err).to.be.an.instanceof(errors.AuthError);
         expect(fatal).to.be.false;
-        expect(err.message).to.equal('AuthFailed : Username does not exist');
+        expect(err.message).to.equal('Username does not exist');
         expect(user).to.not.exist;
         done();
       });
@@ -198,9 +199,9 @@ describe('User', function() {
       User.checkCredentials(
             credentials.invalid.username,
             credentials.invalid.password, function(err, fatal, user) {
-        expect(err).to.be.an.instanceof(Error);
+        expect(err).to.be.an.instanceof(errors.AuthError);
         expect(fatal).to.be.false;
-        expect(err.message).to.equal('AuthFailed : Invalid Password');
+        expect(err.message).to.equal('Invalid Password');
         expect(user).to.not.exist;
         done();
       });
