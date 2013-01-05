@@ -48,13 +48,10 @@ describe('POST /login', function() {
           expect(err).to.not.exist;
           expect(res.body).to.have.property('status', 'success');
           expect(res.body).to.have.property('user');
-          expect(res.body.user).to.have.keys(['__v', 'bookmarks', 'name',
-            'username', 'passwordHash', 'admin', 'email', '_id', 'password'
-          ]);
+          expect(res.body.user).to.have.keys([ 'name', 'username', 'email' ]);
           expect(res.body.user).to.have.deep.property('username', new_user.username);
           expect(res.body.user).to.have.deep.property('name.first', new_user.name.first);
           expect(res.body.user).to.have.deep.property('name.last', new_user.name.last);
-          expect(res.body.user).to.have.deep.property('password', '');
           done();
         });
     });
@@ -75,6 +72,11 @@ describe('POST /login', function() {
         })
         .expect({
           status: 'failure',
+          info: {
+            'level': 'error',
+            'message': 'AuthFailed : Invalid Password'
+          },
+          user: null
         }, done);
     });
 
@@ -94,6 +96,11 @@ describe('POST /login', function() {
         })
         .expect({
           status: 'failure',
+          info: {
+            'level': 'error',
+            'message': 'AuthFailed : Username does not exist'
+          },
+          user: null
         }, done);
     });
 
