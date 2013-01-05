@@ -177,9 +177,8 @@ describe('User', function() {
     it('responds with user if exists and password is correct', function(done) {
       User.checkCredentials(
             credentials.valid.username,
-            credentials.valid.password, function(err, fatal, user) {
+            credentials.valid.password, function(err, user) {
         expect(err).to.not.exist;
-        expect(fatal).to.be.false;
         expect(user).to.be.a('object');
         done(err);
       });
@@ -187,9 +186,8 @@ describe('User', function() {
     it('responds with error if does not exists', function(done) {
       User.checkCredentials(
             credentials.nonexist.username,
-            credentials.nonexist.password, function(err, fatal, user) {
+            credentials.nonexist.password, function(err, user) {
         expect(err).to.be.an.instanceof(errors.AuthError);
-        expect(fatal).to.be.false;
         expect(err.message).to.equal('Username does not exist');
         expect(user).to.not.exist;
         done();
@@ -198,9 +196,8 @@ describe('User', function() {
     it('responds with error if password does not match', function(done) {
       User.checkCredentials(
             credentials.invalid.username,
-            credentials.invalid.password, function(err, fatal, user) {
+            credentials.invalid.password, function(err, user) {
         expect(err).to.be.an.instanceof(errors.AuthError);
-        expect(fatal).to.be.false;
         expect(err.message).to.equal('Invalid Password');
         expect(user).to.not.exist;
         done();
