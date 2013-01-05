@@ -74,6 +74,15 @@ describe('POST /login', function() {
 
     var invalid_password = 'hackpass';
 
+    it('reponds with 401', function(done) {
+      request(app)
+        .post('/login')
+        .send({
+          username: new_user.username,
+          password: invalid_password
+        })
+        .expect(401, done);
+    });
     it('reponds infavorabily to login attempt', function(done) {
       request(app)
         .post('/login')
@@ -81,6 +90,7 @@ describe('POST /login', function() {
           username: new_user.username,
           password: invalid_password
         })
+        .expect(401)
         .expect({
           status: 'failure',
           info: {
@@ -98,6 +108,15 @@ describe('POST /login', function() {
     
     var non_existent_user = 'non-existent';
 
+    it('reponds with 401', function(done) {
+      request(app)
+        .post('/login')
+        .send({
+          username: non_existent_user,
+          password: new_user.password
+        })
+        .expect(401, done);
+    });
     it('reponds infavorabily to login attempt', function(done) {
       request(app)
         .post('/login')
@@ -105,6 +124,7 @@ describe('POST /login', function() {
           username: non_existent_user,
           password: new_user.password
         })
+        .expect(401)
         .expect({
           status: 'failure',
           info: {
