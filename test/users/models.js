@@ -2,7 +2,8 @@
 
 var expect = require('chai').expect
   , utils = require('../utils')
-  , errors = require('../../lib/errors')
+  , SignupError = require('../../lib/errors').SignupError
+  , AuthError = require('../../lib/errors').AuthError
   , User = require('../../models/user').User
   ;
 
@@ -62,7 +63,7 @@ describe('User', function() {
           email: 'agrimaldi2@gstrider.org'
         };
         User.create(new_user, function(err, created_user) {
-          expect(err).to.be.an.instanceof(Error);
+          expect(err).to.be.an.instanceof(SignupError);
           expect(err.message).to.equal('Unavailable username');
           expect(created_user).to.not.exist;
           done();
@@ -80,7 +81,7 @@ describe('User', function() {
           email: 'agrimaldi@gstrider.org'
         };
         User.create(new_user, function(err, created_user) {
-          expect(err).to.be.an.instanceof(Error);
+          expect(err).to.be.an.instanceof(SignupError);
           expect(err.message).to.equal('Unavailable email');
           expect(created_user).to.not.exist;
           done();
@@ -187,7 +188,7 @@ describe('User', function() {
       User.checkCredentials(
             credentials.nonexist.username,
             credentials.nonexist.password, function(err, user) {
-        expect(err).to.be.an.instanceof(errors.AuthError);
+        expect(err).to.be.an.instanceof(AuthError);
         expect(err.message).to.equal('Username does not exist');
         expect(user).to.not.exist;
         done();
@@ -197,7 +198,7 @@ describe('User', function() {
       User.checkCredentials(
             credentials.invalid.username,
             credentials.invalid.password, function(err, user) {
-        expect(err).to.be.an.instanceof(errors.AuthError);
+        expect(err).to.be.an.instanceof(AuthError);
         expect(err.message).to.equal('Invalid Password');
         expect(user).to.not.exist;
         done();
