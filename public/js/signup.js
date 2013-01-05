@@ -2,9 +2,10 @@
  * Signup module
  */
 
-define([ 'jquery' ], function($) {
+define([ 'jquery', 'notifications' ], function($, Notifications) {
 
   var initialize = function() {
+
     $('#signupForm').submit(function(event) {
       
       event.preventDefault();
@@ -31,10 +32,13 @@ define([ 'jquery' ], function($) {
         data: signup_form,
         datatype: 'json',
         success: function(result) {
+          Notifications.dispatch(result.info)
           if (result['redirect']) {
-            window.location.href = result['redirect'];
+            setTimeout(function() {
+              window.location.href = result['redirect'];
+            }, 1500);
           }
-        },
+        }
       }); 
     });
   };

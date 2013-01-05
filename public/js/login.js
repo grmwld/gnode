@@ -32,7 +32,6 @@ define([ 'jquery', 'notifications' ], function($, Notifications) {
           dataType: 'json',
           success: function(result) {
             Notifications.dispatch(result.info);
-
             if (result['redirect']) {
               setTimeout(function() {
                 window.location.href = result['redirect'];
