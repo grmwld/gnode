@@ -179,7 +179,7 @@ userSchema.statics.checkCredentials = function(username, password, callback) {
       callback(err, true);
     }
     if(!user) {
-      callback(new Error('AuthFailed : Username does not exist'), false);
+      callback(new Error('AuthFailed : Username does not exist'), false, null);
     }
     else {
       user.checkPassword(password, function(err, isMatch) {
@@ -187,11 +187,10 @@ userSchema.statics.checkCredentials = function(username, password, callback) {
           callback(err, true);
         }
         if(isMatch) {
-          util.log('Authenticated User ' + username);
           callback(null, false, user);
         }
         else {
-          callback(new Error('AuthFailed : Invalid Password'), false);
+          callback(new Error('AuthFailed : Invalid Password'), false, null);
         }
       });
     }
