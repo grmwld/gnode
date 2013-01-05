@@ -27,7 +27,7 @@ REPORTER = "spec"
 
 test: reinstall-demo test-all remove-demo
 
-test-all: test-models test-users test-api
+test-all: test-users test-api
 
 test-models:
 	@NODE_ENV=test 	./node_modules/.bin/mocha \
