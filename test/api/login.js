@@ -39,6 +39,17 @@ describe('POST /login', function() {
       password: new_user.password
     };
 
+    it('redirects to /account', function(done) {
+      request(app)
+        .post('/login')
+        .send(valid_credentials)
+        .expect(200)
+        .end(function(err, res) {
+          expect(err).to.not.exist;
+          expect(res.body).to.have.property('redirect', '/account');
+          done();
+        });
+    });
     it('reponds favorabily to login attempt', function(done) {
       request(app)
         .post('/login')
@@ -46,15 +57,12 @@ describe('POST /login', function() {
         .expect(200)
         .end(function(err, res) {
           expect(err).to.not.exist;
-          expect(res.body).to.have.property('retStatus', 'success');
+          expect(res.body).to.have.property('status', 'success');
           expect(res.body).to.have.property('user');
-          expect(res.body.user).to.have.keys(['__v', 'bookmarks', 'name',
-            'username', 'passwordHash', 'admin', 'email', '_id', 'password'
-          ]);
+          expect(res.body.user).to.have.keys([ 'name', 'username', 'email' ]);
           expect(res.body.user).to.have.deep.property('username', new_user.username);
           expect(res.body.user).to.have.deep.property('name.first', new_user.name.first);
           expect(res.body.user).to.have.deep.property('name.last', new_user.name.last);
-          expect(res.body.user).to.have.deep.property('password', '');
           done();
         });
     });
@@ -66,6 +74,15 @@ describe('POST /login', function() {
 
     var invalid_password = 'hackpass';
 
+    it('reponds with 401', function(done) {
+      request(app)
+        .post('/login')
+        .send({
+          username: new_user.username,
+          password: invalid_password
+        })
+        .expect(401, done);
+    });
     it('reponds infavorabily to login attempt', function(done) {
       request(app)
         .post('/login')
@@ -73,8 +90,14 @@ describe('POST /login', function() {
           username: new_user.username,
           password: invalid_password
         })
+        .expect(401)
         .expect({
-          retStatus: 'failure',
+          status: 'failure',
+          info: {
+            'level': 'error',
+            'message': 'AuthFailed : Invalid Password'
+          },
+          user: null
         }, done);
     });
 
@@ -85,6 +108,15 @@ describe('POST /login', function() {
     
     var non_existent_user = 'non-existent';
 
+    it('reponds with 401', function(done) {
+      request(app)
+        .post('/login')
+        .send({
+          username: non_existent_user,
+          password: new_user.password
+        })
+        .expect(401, done);
+    });
     it('reponds infavorabily to login attempt', function(done) {
       request(app)
         .post('/login')
@@ -92,8 +124,14 @@ describe('POST /login', function() {
           username: non_existent_user,
           password: new_user.password
         })
+        .expect(401)
         .expect({
-          retStatus: 'failure',
+          status: 'failure',
+          info: {
+            'level': 'error',
+            'message': 'AuthFailed : Username does not exist'
+          },
+          user: null
         }, done);
     });
 

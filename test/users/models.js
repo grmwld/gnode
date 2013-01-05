@@ -176,49 +176,50 @@ describe('User', function() {
     it('responds with user if exists and password is correct', function(done) {
       User.checkCredentials(
             credentials.valid.username,
-            credentials.valid.password, function(err, user) {
-        try {
-          expect(err).to.not.exist;
-          expect(user).to.be.a('object');
-          done(err);
-        }
-        catch(err) {
-          done(err);
-        }
+            credentials.valid.password, function(err, fatal, user) {
+        expect(err).to.not.exist;
+        expect(fatal).to.be.false;
+        expect(user).to.be.a('object');
+        done(err);
       });
     });
     it('responds with error if does not exists', function(done) {
       User.checkCredentials(
             credentials.nonexist.username,
-            credentials.nonexist.password, function(err, user) {
-        try {
-          expect(err).to.be.an.instanceof(Error);
-          expect(err.message).to.equal('AuthFailed : Username does not exist');
-          expect(user).to.be.undefined;
-          done();
-        }
-        catch(err) {
-          done(err);
-        }
+            credentials.nonexist.password, function(err, fatal, user) {
+        expect(err).to.be.an.instanceof(Error);
+        expect(fatal).to.be.false;
+        expect(err.message).to.equal('AuthFailed : Username does not exist');
+        expect(user).to.not.exist;
+        done();
       });
     });
     it('responds with error if password does not match', function(done) {
       User.checkCredentials(
             credentials.invalid.username,
-            credentials.invalid.password, function(err, user) {
-        try {
-          expect(err).to.be.an.instanceof(Error);
-          expect(err.message).to.equal('AuthFailed : Invalid Password');
-          expect(user).to.be.undefined;
-          done();
-        }
-        catch(err) {
-          done(err);
-        }
+            credentials.invalid.password, function(err, fatal, user) {
+        expect(err).to.be.an.instanceof(Error);
+        expect(fatal).to.be.false;
+        expect(err.message).to.equal('AuthFailed : Invalid Password');
+        expect(user).to.not.exist;
+        done();
       });
     });
 
   });
+
+
+  //describe('.hasPrivilege()', function() {
+    
+    //beforeEach(function(done) {
+      //User.remove(function(err) {
+        //User.create(new_user, function(err, created_user) {
+          //done(err);
+        //});
+      //});
+    //});
+
+  //});
 
   
 });

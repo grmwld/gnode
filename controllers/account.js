@@ -1,3 +1,6 @@
+var ensureAuthenticated = require('../lib/middlewares').ensureAuthenticated
+;
+
 
 /**
  * Function used to handle the routing associated to
@@ -12,7 +15,7 @@ var route = function(app) {
    *
    * @handle {Route#GET} /
    */
-  app.get('/account', function(req, res) {
+  app.get('/account', ensureAuthenticated, function(req, res) {
     res.render('account', {
       title: 'GStrider : Account'
     });

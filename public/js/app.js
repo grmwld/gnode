@@ -3,16 +3,18 @@
 //require('jquery');
 
 //define a module here that will initialize main page widgets
-define([
-    'jquery'
-  , 'login'
-  , 'signup'
-   //, 'admin'
-], function($, Login, Signup) {
+define(
+  [ 'jquery', 'lodash', 'notifications', 'login', 'signup', 'bootstrap'],
+  function($, _, Notifications, Login, Signup) {
+
   var initialize = function() {
+
+    Notifications.initialize();
     Login.initialize();
     Signup.initialize();
-  }
+
+  };
+  
   return {
     initialize: initialize
   };
