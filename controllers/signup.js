@@ -1,5 +1,23 @@
 var User = require('../models/user').User;
 
+
+/**
+ * Format validator errors to messages
+ * @param {Array} errors
+ * @returns {Array}
+ */
+var formatErrs = function(errors) {
+  var ferrors = [];
+  errors.forEach(function(e) {
+    ferrors.push({
+      level: 'error',
+      message: e['msg']
+    });
+  });
+  return ferrors;
+};
+
+
 /**
  * Function used to handle the routing associated to
  * the signup page '/signup'
@@ -38,7 +56,11 @@ var route = function(app) {
     
     errors = req.validationErrors();
     if (errors) {
-      return res.redirect('/signup');
+      return res.json(200, {
+        status: 'failure',
+        info: formatErrs(errors),
+        redirect: false
+      });
     }
 
     new_user = {
@@ -53,13 +75,18 @@ var route = function(app) {
 
     User.create(new_user, function(err, created_user) {
       if (err) {
-        return res.send({
-          error: err.message,
+        return res.json(200, {
+          status: 'error',
+          info: err.repr,
           redirect: false
         });
       };
-      return res.send({
-        error: null,
+      return res.json(200, {
+        status: 'success',
+        info: {
+          level: 'success',
+          message: 'Welcome'
+        },
         redirect: '/account'
       });
     });
