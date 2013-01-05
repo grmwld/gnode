@@ -39,6 +39,17 @@ describe('POST /login', function() {
       password: new_user.password
     };
 
+    it('redirects to /account', function(done) {
+      request(app)
+        .post('/login')
+        .send(valid_credentials)
+        .expect(200)
+        .end(function(err, res) {
+          expect(err).to.not.exist;
+          expect(res.body).to.have.property('redirect', '/account');
+          done();
+        });
+    });
     it('reponds favorabily to login attempt', function(done) {
       request(app)
         .post('/login')
