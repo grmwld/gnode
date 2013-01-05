@@ -6,7 +6,8 @@ var util = require('util')
   , bcrypt = require('bcrypt')
   , mongoose = require('mongoose')
   , Schema = mongoose.Schema
-  , errors = require('../lib/errors')
+  , SignupError = require('../lib/errors').SignupError
+  , AuthError = require('../lib/errors').AuthError
   ;
 
 
@@ -70,7 +71,7 @@ userSchema.pre('save', function checkUsername(next/*, errors*/) {
     if (err) next(err);
     if (user) {
       self.invalidate('username', 'Unavailable username');
-      next(new Error('Unavailable username'));
+      next(new SignupError('Unavailable username'));
     }
     next();
   });
@@ -87,7 +88,7 @@ userSchema.pre('save', function checkEmail(next/*, errors*/) {
     if (err) next(err);
     if (user) {
       self.invalidate('email', 'Unavailable email');
-      next(new Error('Unavailable email'));
+      next(new SignupError('Unavailable email'));
     }
     next();
   });
@@ -180,7 +181,7 @@ userSchema.statics.checkCredentials = function(username, password, callback) {
       callback(err);
     }
     if(!user) {
-      callback(new errors.AuthError('Username does not exist'), null);
+      callback(new AuthError('Username does not exist'), null);
     }
     else {
       user.checkPassword(password, function(err, isMatch) {
@@ -191,7 +192,7 @@ userSchema.statics.checkCredentials = function(username, password, callback) {
           callback(null, user);
         }
         else {
-          callback(new errors.AuthError('Invalid Password'), null);
+          callback(new AuthError('Invalid Password'), null);
         }
       });
     }
