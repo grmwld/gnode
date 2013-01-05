@@ -31,9 +31,9 @@ describe('POST /signup', function() {
           .expect(200)
           .end(function(err, res) {
             expect(err).to.not.exist;
-            expect(res.body).to.have.property('error', null);
-            expect(res.body).to.have.property('redirect');
-            expect(res.body['redirect']).to.include('/account');
+            expect(res.body).to.have.property('status', 'success');
+            expect(res.body).to.have.property('info');
+            expect(res.body).to.have.property('redirect', '/account');
             done();
           });
       });
@@ -73,10 +73,16 @@ describe('POST /signup', function() {
         request(app)
         .post('/signup')
         .send(form)
-        .expect(302)
+        .expect(200)
         .end(function(err, res) {
           expect(err).to.not.exist;
-          expect(res.header.location).to.include('/signup');
+          expect(res.body).to.have.property('status', 'failure');
+          expect(res.body['info']).to.deep.equal([
+            {level:'error', message:'Invalid email'},
+            {level:'error', message:'Passwords do not match'},
+            {level:'error', message:'Last name must be composed of letters'}
+          ]);
+          expect(res.body).to.have.property('redirect', false);
           done();
         });
       });
@@ -124,8 +130,9 @@ describe('POST /signup', function() {
           .expect(200)
           .end(function(err, res) {
             expect(err).to.not.exist;
+            expect(res.body).to.have.property('status', 'error');
+            expect(res.body['info']).to.deep.equal({level:'error', message:'Unavailable username'});
             expect(res.body).to.have.property('redirect', false);
-            expect(res.body).to.have.property('error', 'Unavailable username');
             done();
           });
       });
@@ -149,8 +156,9 @@ describe('POST /signup', function() {
           .expect(200)
           .end(function(err, res) {
             expect(err).to.not.exist;
+            expect(res.body).to.have.property('status', 'error');
+            expect(res.body['info']).to.deep.equal({level:'error', message:'Unavailable email'});
             expect(res.body).to.have.property('redirect', false);
-            expect(res.body).to.have.property('error', 'Unavailable email');
             done();
           });
       });
