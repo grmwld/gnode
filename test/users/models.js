@@ -205,17 +205,53 @@ describe('User', function() {
   });
 
 
-  //describe('.hasPrivilege()', function() {
+  describe('.hasPrivilege', function() {
     
-    //beforeEach(function(done) {
-      //User.remove(function(err) {
-        //User.create(new_user, function(err, created_user) {
-          //done(err);
-        //});
-      //});
-    //});
+    var admin_user = {
+      name: {
+        first: 'Alexis',
+        last: 'GRIMALDI'
+      },
+      username: 'agrimaldi-model-admin',
+      password: 'secret',
+      email: 'agrimaldi-admin@gstrider.org',
+      privileges: ['admin']
+    };
+    var std_user = {
+      name: {
+        first: 'Alexis',
+        last: 'GRIMALDI'
+      },
+      username: 'agrimaldi-model-std',
+      password: 'secret',
+      email: 'agrimaldi-std@gstrider.org',
+      privileges: []
+    };
+    
+    beforeEach(function(done) {
+      User.remove(function(err) {
+        User.create(admin_user, function(err, created_user) {
+          User.create(std_user, function(err, created_user) {
+            done(err);
+          });
+        });
+      });
+    });
 
-  //});
+    it('should return true if user has a privilege', function(done) {
+      User.findByUsername(admin_user['username'], function(err, user) {
+        expect(user.hasPrivilege('admin')).to.be.true;
+        done();
+      });
+    });
+    it('should return false if user has not a privilege', function(done) {
+      User.findByUsername(std_user['username'], function(err, user) {
+        expect(user.hasPrivilege('admin')).to.be.false;
+        done();
+      });
+    });
+
+  });
 
   
 });
