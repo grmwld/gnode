@@ -43,8 +43,9 @@ var userSchema = new Schema({
     set: toLower,
     unique: true
   },
-  admin: Boolean,
-  bookmarks: Array,
+  privileges: Array,
+  instances: Array,
+  bookmarks: Array
 });
 
 
@@ -128,17 +129,26 @@ userSchema.pre('save', function hashPassword(next) {
  *************/
 
 /**
- * Check if a user password matches a candidated password
+ * check if a user password matches a candidated password
  *
- * @param {String} username
- * @param {String} password
- * @param {Function} callback
+ * @param {string} password
+ * @param {function} callback
  */
 userSchema.methods.checkPassword = function(password, callback) {
   bcrypt.compare(password, this.passwordHash, function(err, isMatch) {
     if (err) return callback(err);
     callback(null, isMatch);
   });
+};
+
+/**
+ * check if a user has a given privilege
+ *
+ * @param {String} privilege
+ * @returns {Boolean}
+ */
+userSchema.methods.hasPrivilege = function(privilege) {
+  return (this['privileges'].indexOf(privilege) > -1);
 };
 
 

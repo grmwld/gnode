@@ -18,7 +18,6 @@ describe('User', function() {
     },
     username: 'agrimaldi-model',
     password: 'secret',
-    admin: true,
     email: 'agrimaldi@gstrider.org'
   };
 
@@ -59,7 +58,6 @@ describe('User', function() {
           },
           username: 'agrimaldi-model',
           password: 'secret',
-          admin: true,
           email: 'agrimaldi2@gstrider.org'
         };
         User.create(new_user, function(err, created_user) {
@@ -77,7 +75,6 @@ describe('User', function() {
           },
           username: 'agrimaldi-2-model',
           password: 'secret',
-          admin: true,
           email: 'agrimaldi@gstrider.org'
         };
         User.create(new_user, function(err, created_user) {

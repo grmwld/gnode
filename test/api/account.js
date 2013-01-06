@@ -15,7 +15,6 @@ var new_user = {
   },
   username: 'agrimaldi',
   password: 'secret',
-  admin: true,
   email: 'agrimaldi@gstrider.org'
 };
 

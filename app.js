@@ -82,6 +82,7 @@ var contact = require('./controllers/contact');
 var documentation = require('./controllers/documentation');
 var account = require('./controllers/account');
 var signup = require('./controllers/signup');
+var admin = require('./controllers/admin');
 
 home.route(app);
 login.route(app);
@@ -90,6 +91,7 @@ contact.route(app);
 documentation.route(app);
 account.route(app);
 signup.route(app);
+admin.route(app);
 
 
 /**
