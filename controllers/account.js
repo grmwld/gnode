@@ -4,16 +4,16 @@ var ensureAuthenticated = require('../lib/middlewares').ensureAuthenticated
 
 /**
  * Function used to handle the routing associated to
- * the homepage '/'
+ * the account page '/account'
  *
  * @param {Object} application
  */
 var route = function(app) {
   
   /**
-   * Route to homepage
+   * Route to account
    *
-   * @handle {Route#GET} /
+   * @handle {Route#GET} /account
    */
   app.get('/account', ensureAuthenticated, function(req, res) {
     res.render('account', {
